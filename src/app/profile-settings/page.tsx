@@ -1,4 +1,4 @@
-export default function ProfileSettings() {
+export default function Page() {
     return(
         <div>
             hi
