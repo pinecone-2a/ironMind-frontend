@@ -1,3 +1,4 @@
+import { SideBar } from "./_Components/SideBar";
 
 export default function RootLayout({
   children,
@@ -5,10 +6,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
- <> 
- {children}
- </>
-       
-    
+    <div>
+      <div className="flex px-[80px] py-[44px] h-screen">
+        <SideBar />
+        <div className="overflow-y-scroll px-[76px] w-full">{children}</div>
+      </div>
+    </div>
   );
 }
