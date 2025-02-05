@@ -103,3 +103,48 @@ export function ProfileForm2() {
     </div>
   )
 }
+
+export function ProfileForm3() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+    },
+  })
+ 
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+  }
+
+  return(
+    <div className="h-screen w-[40%] justify-center items-center flex relative">
+    <div className=" flex flex-col items-start">
+     <p className="font-semibold text-[24px] mb-2">Welcome, baconpancakes1</p>
+     <p className="text-[#71717A] text-[14px] mb-4">Connect email and set a password</p>
+     <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+       <FormField
+         control={form.control}
+         name="username"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel>Email</FormLabel>
+             <FormControl>
+               <Input placeholder="Enter email here" {...field} />
+             </FormControl>
+
+             <FormLabel>Password</FormLabel>
+             <FormControl>
+               <Input placeholder="Enter password here" {...field} />
+             </FormControl>
+           </FormItem>
+          )}
+        />
+        <Button>Continue</Button>
+       </form>
+      </Form>
+     </div>
+     <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-7 right-0">Log In</button>
+    </div>
+  )
+}
