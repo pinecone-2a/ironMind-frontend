@@ -9,7 +9,7 @@ export default function RootLayout({
     <div>
       <div className="flex px-[80px] py-[44px] h-screen">
         <SideBar />
-        <div className="overflow-y-scroll px-[76px] w-full">{children}</div>
+        <div className="overflow-y-scroll px-[76px] w-full h-[calc(100vh - 44px)]">{children}</div>
       </div>
     </div>
   );
