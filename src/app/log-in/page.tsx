@@ -29,7 +29,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,8 +37,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  username: z.string().min(5, {
+    message: "Username must be at least 5 characters.",
   }),
 })
 
@@ -58,13 +57,13 @@ export default function ProfileForm() {
 
   return (
     <div className="flex gap-8 justify-center">
-    <img src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png" className="h-screen bg-center bg-cover"></img>
+    <img src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png" className="h-screen"></img>
     <div className="h-screen w-[40%] justify-center items-center flex relative">
-    <div className=" flex flex-col items-start">
-     <p className="font-semibold text-[24px] mb-2">Create your account</p>
-     <p className="text-[#71717A] text-[14px] mb-4">Choose a username for your page</p>
-     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+     <div className=" flex flex-col items-start">
+      <p className="font-semibold text-[24px] mb-2">Create your account</p>
+      <p className="text-[#71717A] text-[14px] mb-4">Choose a username for your page</p>
+      <Form {...form}>
+       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="username"
@@ -76,12 +75,12 @@ export default function ProfileForm() {
               </FormControl>
               <FormMessage />
             </FormItem>
-          )}
-        />
-        <Button>Continue</Button>
-      </form>
-     </Form>
-     </div>
+           )}
+         />
+         <Button>Continue</Button>
+        </form>
+       </Form>
+      </div>
      </div>
     </div>
   )
