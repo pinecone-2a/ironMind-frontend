@@ -11,7 +11,7 @@ import {
 
 export default function Page() {
   return (
-    <div className="max-w-[672px] h-screen w-[650px] flex flex-col gap-8 ">
+    <div className="max-w-[672px] w-[650px] flex flex-col gap-8  ">
       <h1 className="text-2xl font-semibold">My account</h1>
       <div
         className="bg-background rounded-lg p-6 flex flex-col gap-6 border border-border
@@ -101,7 +101,7 @@ export default function Page() {
       >
         <h2 className="text-base font-bold">Payment details</h2>
         <form action="" className="flex flex-col gap-3">
-          <label className="flex flex-col gap-2">
+          <label className="flex flex-col gap-2 whitespace-nowrap">
             <h3 className="text-sm font-medium">Select country</h3>
             <Select>
               <SelectTrigger className="w-full">
@@ -152,7 +152,7 @@ export default function Page() {
             />
           </label>
           <div className="flex gap-4 w-full">
-            <label className="w-full flex flex-col gap-2">
+            <label className="w-full flex flex-col gap-2 whitespace-nowrap">
               <h3 className="text-sm font-medium">Expires</h3>
               <Select>
                 <SelectTrigger className="">
@@ -177,7 +177,7 @@ export default function Page() {
                 </SelectContent>
               </Select>
             </label>
-            <label className="w-full flex flex-col gap-2">
+            <label className="w-full flex flex-col gap-2 whitespace-nowrap">
               <h3 className="text-sm font-medium">Year</h3>
               <Select>
                 <SelectTrigger className="">
@@ -186,16 +186,13 @@ export default function Page() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Year</SelectLabel>
-                    <SelectItem value="2016">2016</SelectItem>
-                    <SelectItem value="2017">2017</SelectItem>
-                    <SelectItem value="2018">2018</SelectItem>
-                    <SelectItem value="2019">2019</SelectItem>
-                    <SelectItem value="2020">2020</SelectItem>
-                    <SelectItem value="2021">2021</SelectItem>
-                    <SelectItem value="2022">2022</SelectItem>
-                    <SelectItem value="2023">2023</SelectItem>
-                    <SelectItem value="2024">2024</SelectItem>
                     <SelectItem value="2025">2025</SelectItem>
+                    <SelectItem value="2026">2026</SelectItem>
+                    <SelectItem value="2027">2027</SelectItem>
+                    <SelectItem value="2028">2028</SelectItem>
+                    <SelectItem value="2029">2029</SelectItem>
+                    <SelectItem value="2030">2030</SelectItem>
+                    <SelectItem value="2031">2031</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
