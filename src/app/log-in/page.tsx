@@ -37,7 +37,7 @@ return (
     <div className="w-[50%] h-screen bg-[#FBBF24] flex items-center justify-center">
       <img src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png" className="h-screen"/>
     </div>
-    <div className="h-screen w-[50%] flex justify-center items-center">
+    <div className="h-screen w-[50%] justify-center items-center">
       <div className="h-screen w-[80%] flex justify-center items-center relative">
         <div className="flex flex-col items-start">
           <p className="font-semibold text-[24px] mb-2">Welcome back</p>
