@@ -17,9 +17,7 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email"
   }),
-  password: z
-  .string()
-  .min(6,{
+  password: z.string().min(6,{
     message: "Password must be 6 or more characters long" 
   })
 })
@@ -34,54 +32,53 @@ const handleSubmit = (data: z.infer<typeof formSchema>) => {
   console.log("Form Data", data); 
 };
 
-  return (
-    <div className="flex justify-center">
-      <div className="w-[50%] h-screen bg-[#FBBF24] flex items-center justify-center">
-        <img src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png" className="h-screen"></img>
+return (
+  <div className="flex justify-center">
+    <div className="w-[50%] h-screen bg-[#FBBF24] flex items-center justify-center">
+      <img src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png" className="h-screen"/>
+    </div>
+    <div className="h-screen w-[50%] flex justify-center items-center">
+      <div className="h-screen w-[80%] flex justify-center items-center relative">
+        <div className="flex flex-col items-start">
+          <p className="font-semibold text-[24px] mb-2">Welcome back</p>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 w-[140%]">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter email here" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter password here" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button className="w-[100%]">Continue</Button>
+            </form>
+          </Form>
+        </div>
+        <Link href="/sign-up">
+          <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">Sign up</button>
+        </Link>
       </div>
-      <div className="h-screen w-[50%] justify-center items-center">
-    <div className="h-screen w-[80%] justify-center items-center flex relative">
-    <div className=" flex flex-col items-start">
-     <p className="font-semibold text-[24px] mb-2">Welcome back</p>
-     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 w-[140%]">
-       <FormField
-         control={form.control}
-         name="email"
-         render={({ field }) => (
-           <FormItem>
-             <FormLabel>Email</FormLabel>
-             <FormControl>
-               <Input placeholder="Enter email here" {...field} />
-             </FormControl>
-             <FormMessage/>
-           </FormItem>
-          )}
-        />
-       <FormField
-         control={form.control}
-         name="password"
-         render={({ field }) => (
-           <FormItem>
-             <FormLabel>Password</FormLabel>
-             <FormControl>
-               <Input placeholder="Enter password here" {...field} />
-             </FormControl>
-             <FormMessage/>
-           </FormItem>
-          )}
-        />
-        <Button className="w-[100%]">Continue</Button>
-       </form>
-      </Form>
-     </div>
-     <Link href='/sign-up'>
-       <button
-         className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">Sign up</button>
-     </Link>
+    </div>
+  </div>
+);
 
-    </div>
-    </div>
-    </div>
-  )
 }
