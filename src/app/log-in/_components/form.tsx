@@ -11,7 +11,7 @@ import { Form,
   FormLabel,
   FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { Link } from "lucide-react"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -27,14 +27,15 @@ const formSchema = z.object({
   })
 })
 
-export function ProfileForm1({ onSubmit }: { onSubmit: (username: string) => void }) {
+export function UsernameSignup({ onSubmit, onClick }: { onSubmit: (username: string) => void; onClick: () => void; }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
     },
   })
-  const handleClick = () => {
+  
+  const handleUsernameSubmit = () => {
     const username = form.getValues("username")
     if (username.length >= 2) {
       onSubmit(username)
@@ -45,8 +46,13 @@ export function ProfileForm1({ onSubmit }: { onSubmit: (username: string) => voi
     }
   };
 
+  const handleSubmit = () => {
+     onClick()
+  };
+
       return(
-        <div className="h-screen w-[40%] justify-center items-center flex relative">
+        <div className="h-screen w-[50%] justify-center items-center">
+        <div className="h-screen w-[80%] justify-center items-center flex relative">
         <div className=" flex flex-col items-start">
          <p className="font-semibold text-[24px] mb-2">Create your account</p>
          <p className="text-[#71717A] text-[14px] mb-4">Choose a username for your page</p>
@@ -65,16 +71,20 @@ export function ProfileForm1({ onSubmit }: { onSubmit: (username: string) => voi
                </FormItem>
               )}
             />
-            <Button className="w-[100%]" onClick={handleClick}>Continue</Button>
+            <Button className="w-[100%]" onClick={handleUsernameSubmit}>Continue</Button>
            </form>
           </Form>
          </div>
-         <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-7 right-0">Log In</button>
+         <button 
+           className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0" 
+           onClick={onClick}>Log In</button>
+
+        </div>
         </div>
       )
 }
 
-export function ProfileForm2({ username }: { username: string }) {
+export function EmailPasswordSignup({ username,onClick }: { username: string; onClick: () => void; }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,15 +92,19 @@ export function ProfileForm2({ username }: { username: string }) {
     },
   })
 
+  const handleClick = () => {
+    onClick()
+  }
 
 const handleSubmit = (data: z.infer<typeof formSchema>) => {
-  console.log("Form Data", data); // You can handle form submission here
+  console.log("Form Data", data); 
 };
 
   return(
-    <div className="h-screen w-[40%] justify-center items-center flex relative">
+    <div className="h-screen w-[50%] justify-center items-center">
+    <div className="h-screen w-[80%] justify-center items-center flex relative">
     <div className=" flex flex-col items-start">
-     <p className="font-semibold text-[24px] mb-2">Welcome,  {username}</p>
+     <p className="font-semibold text-[24px] mb-2">Welcome, {username}</p>
      <p className="text-[#71717A] text-[14px] mb-4">Connect email and set a password</p>
      <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 w-[140%]">
@@ -124,9 +138,69 @@ const handleSubmit = (data: z.infer<typeof formSchema>) => {
        </form>
       </Form>
      </div>
-     <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-7 right-0">Log In</button>
+     <button
+       className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0"
+       onClick={handleClick}>Log In</button>
+    </div>
     </div>
   )
 }
 
+export function EmailPasswordLogin({onClick}: {onClick: () => void;}) {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {email: "",password: ""},
+  })
 
+  const handleClick = () => {
+    onClick()
+  }
+
+const handleSubmit = (data: z.infer<typeof formSchema>) => {
+  console.log("Form Data", data); 
+};
+
+  return(
+    <div className="h-screen w-[50%] justify-center items-center">
+    <div className="h-screen w-[80%] justify-center items-center flex relative">
+    <div className=" flex flex-col items-start">
+     <p className="font-semibold text-[24px] mb-2">Welcome back</p>
+     <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 w-[140%]">
+       <FormField
+         control={form.control}
+         name="email"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel>Email</FormLabel>
+             <FormControl>
+               <Input placeholder="Enter email here" {...field} />
+             </FormControl>
+             <FormMessage/>
+           </FormItem>
+          )}
+        />
+       <FormField
+         control={form.control}
+         name="password"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel>Password</FormLabel>
+             <FormControl>
+               <Input placeholder="Enter password here" {...field} />
+             </FormControl>
+             <FormMessage/>
+           </FormItem>
+          )}
+        />
+        <Button className="w-[100%]">Continue</Button>
+       </form>
+      </Form>
+     </div>
+     <button
+       className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0"
+       onClick={handleClick}>Sign up</button>
+    </div>
+    </div>
+  )
+}
