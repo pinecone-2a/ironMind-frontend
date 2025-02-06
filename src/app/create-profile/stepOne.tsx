@@ -24,6 +24,7 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
+      error.image = ""
       setImage(URL.createObjectURL(event.target.files[0]));
     }
   };

@@ -5,6 +5,7 @@ import { CreateProfileStep1 } from "./stepOne";
 import { CreateProfileStep2 } from "./stepTwo";
 import { useState, ChangeEvent } from "react";
 import Done from "./done";
+import { Regex } from "lucide-react";
 
 export type UserInfo = {
   image: string;
@@ -37,6 +38,11 @@ type ErrorInfo = {
 
 export default function CreateProfile() {
   const [currentStep, setCurrentStep] = useState<number>(1);
+
+  
+
+
+
   const [userInfo, setUserInfo] = useState<UserInfo>({
     image: "",
     name: "",
@@ -66,27 +72,32 @@ export default function CreateProfile() {
   });
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
+    const field = e.target.id
+    const value = e.target.value
+    const newValues = {...userInfo, [field]: value}
+
     setUserInfo((prev) => ({
       ...prev,
-      [id]: value,
+      [field]: value,
     }));
 
     setError((prev) => ({
       ...prev,
-      [id]: "",
+      [field]: "",
     }));
   };
+    const urlRegex = /\b(?:https?|ftp):\/\/(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(?:\/[^\s]*)?\b/;
+    const nameRegex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžæÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
 
   const validateFields = () => {
     const newErrors: ErrorInfo = {
-      image: userInfo.image ? "" : "Please enter image",
+      image: userInfo.image ? "" : "",
       name: userInfo.name ? "" : "Please enter name",
       about: userInfo.about ? "" : "Please enter info about yourself",
-      socialURL: userInfo.socialURL ? "" : "Please enter a social link",
+      socialURL: userInfo.socialURL ? (urlRegex.test(userInfo.socialURL) ? "" : "Please enter a valid social link") : "Please enter a social link",
       country: userInfo.country ? "" : "Select country to continue",
-      firstName: userInfo.firstName ? "" : "First name must match",
-      lastName: userInfo.lastName ? "" : "Last name must match",
+      firstName: userInfo.firstName ? (nameRegex.test(userInfo.firstName) ? "" : "First name must match") : "First name must match",
+      lastName: userInfo.lastName ? (nameRegex.test(userInfo.lastName) ? "" : "Last name must match") : "Last name must match",
       cardNumber: userInfo.cardNumber ? "" : "Invalid card number",
       expires: userInfo.expires ? "" : "Invalid month",
       year: userInfo.year ? "" : "Invalid month",
