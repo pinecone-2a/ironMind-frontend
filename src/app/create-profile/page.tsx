@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CreateProfileStep1 } from "./stepOne";
 import { CreateProfileStep2 } from "./stepTwo";
 import { useState, ChangeEvent } from "react";
-
+import Done from "./done";
 
 export type UserInfo = {
   image: string;
@@ -36,7 +36,7 @@ type ErrorInfo = {
 };
 
 export default function CreateProfile() {
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     image: "",
     name: "",
@@ -113,6 +113,7 @@ export default function CreateProfile() {
     <> 
       {currentStep === 1 && <CreateProfileStep1 userInfo={userInfo} error={error} onChange={onChange}  handleNext={handleNext}/>}
       {currentStep === 2 && <CreateProfileStep2 userInfo={userInfo} error={error} onChange={onChange} handleSubmit={handleSubmit} />}
+      {/* {currentStep === 3 &&  <Done/>}  */}
 
      </>
   );

@@ -18,13 +18,13 @@ type ProfileStepProps = {
 }
 
 
-export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error, onChange, handleNext }) => {
-  const [image, setImage] = useState<string | null>(null);
+export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error, onChange, handleNext, }) => {
+  const [image, setImage] = useState<string | null>();
+
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setImage(URL.createObjectURL(event.target.files[0]));
-
     }
   };
 
@@ -50,7 +50,7 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
         ></label>
         {error.image && <p className="text-[#EF4444] font-[400] text-xs mb-[18px]">{error.image}</p>}
 
-        <input id="avatar" onChange={handleChange} type="file" accept="image/*" className="hidden" />
+        <input id="avatar"  onChange={handleChange} type="file" accept="image/*" className="hidden" />
 
 
         <label htmlFor="name">Name</label>
