@@ -24,9 +24,6 @@ export default function Home(){
               </div>
             </div>
         </div>
-        <div>hello</div>
-        <div>heilll</div>
-        <div>bfisbifgsifgiefgsi</div>
     </div></>
     
 }
