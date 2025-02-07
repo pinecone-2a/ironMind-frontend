@@ -19,15 +19,21 @@ type ProfileStepProps = {
 
 
 export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error, onChange, handleNext }) => {
-  const [image, setImage] = useState<string | null>(null);
+
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setImage(URL.createObjectURL(event.target.files[0]));
-
+      const file = event.target.files[0];
+  
+ 
+      onChange({
+        target: { id: "image", value: URL.createObjectURL(file) },
+      } as ChangeEvent<HTMLInputElement>);
     }
   };
-
+  
+  
+  
   return (
     <div className="h-screen w-screen bg-white flex justify-center items-center">
       <div className="h-fit w-[510px] flex flex-col">
@@ -39,9 +45,9 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
           className="rounded-full border-[2px] border-gray-400 border-dashed h-[160px] w-[160px] mb-[24px]"
           htmlFor="avatar"
           style={
-            image
+            userInfo.image
               ? {
-                  backgroundImage: `url(${image})`,
+                  backgroundImage: `url(${userInfo.image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }
