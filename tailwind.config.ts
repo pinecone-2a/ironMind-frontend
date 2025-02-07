@@ -1,3 +1,4 @@
+import { Inter } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -9,6 +10,9 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			Inter: ['Inter'],
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

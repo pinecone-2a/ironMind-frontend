@@ -1,32 +1,173 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { CreateProfileStep1 } from "./stepOne";
+import { CreateProfileStep2 } from "./stepTwo";
+import { useState, ChangeEvent } from "react";
+import Success from "./success";
+
+export type UserInfo = {
+  image: string;
+  name: string;
+  about: string;
+  socialURL: string;
+
+};
+
+export type userCardInfo = {
+  country: string;
+  firstName: string;
+  lastName: string;
+  cardNumber: string;
+  expires: string;
+  year: string;
+  cvc: string;
+};
+
+
+type profilError = {
+  image: string;
+  name: string;
+  about: string;
+  socialURL: string;
+};
+
+type cardError = {
+  country: string;
+  firstName: string;
+  lastName: string;
+  cardNumber: string;
+  expires: string;
+  year: string;
+  cvc: string;
+}
 
 export default function CreateProfile() {
- 
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    image: "",
+    name: "",
+    about: "",
+    socialURL: "",
+  });
 
- 
+  const [userCardInfo, setUserCardInfo] = useState<userCardInfo>({
+    country: "",
+    firstName: "",
+    lastName: "",
+    cardNumber: "",
+    expires: "",
+    year: "2025",
+    cvc: "",
+  })
+
+  const [error, setError] = useState<profilError>({
+    image: "",
+    name: "",
+    about: "",
+    socialURL: "",
+  });
+
+  const [cardError, setCardError] = useState<cardError>({
+    country: "",
+    firstName: "",
+    lastName: "",
+    cardNumber: "",
+    expires: "",
+    year: "",
+    cvc: "",
+  });
+
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setUserInfo((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+
+    setError((prev) => ({
+      ...prev,
+      [id]: "",
+    }));
+  };
+
+
+  const onChangeStep2 = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+  
+    console.log(`Updating ${id} with value:`, value); 
+  
+    setUserCardInfo((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  
+    setCardError((prev) => ({
+      ...prev,
+      [id]: "", 
+    }));
+  };
+  
+
+  const profileValidate = () => {
+    const newErrors: profilError = {
+      image: userInfo.image ? "" : "Please enter image",
+      name: userInfo.name ? "" : "Please enter name",
+      about: userInfo.about ? "" : "Please enter info about yourself",
+      socialURL: userInfo.socialURL ? "" : "Please enter a social link",
+    };
+
+    setError(newErrors);
+    return Object.values(newErrors).every((err) => err === ""); 
+  };
+
+
+  const cardValidate = () => {
+    const cardNumberRegex = /^[0-9]{16}$/;
+    const monthRegex = /^(0[1-9]|1[0-2])$/;
+    const yearRegex = /^(20[2-9][0-9])$/;
+    const cvcRegex = /^[0-9]{3,4}$/; 
+    const nameRegex = /^[a-zA-Z\s]+$/; 
+  
+    const newErrors: cardError = {
+      country: userCardInfo.country ? "" : "Select country to continue",
+      firstName: nameRegex.test(userCardInfo.firstName) ? "" : "First name must match",
+      lastName: nameRegex.test(userCardInfo.lastName) ? "" : "Last name must match",
+      cardNumber: cardNumberRegex.test(userCardInfo.cardNumber) ? "" : "Invalid card number",
+      expires: monthRegex.test(userCardInfo.expires) ? "" : "Invalid month",
+      year: yearRegex.test(userCardInfo.year) ? "" : "Invalid month",
+      cvc: cvcRegex.test(userCardInfo.cvc) ? "" : "Invalid month",
+    };
+  
+    setCardError(newErrors);
+    return Object.values(newErrors).every((err) => err === ""); 
+  };
+  
+
+  const handleNext = () => {
+    console.log("Checking")
+    if (profileValidate()) {
+      console.log("Validation passed, moving to the next step.");
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      console.log("Validation failed, staying on the same step.");
+      console.log(userInfo)
+    }
+  };
+  
+
+  const handleSubmit = () => {
+    if (cardValidate()) {
+      setCurrentStep((prev) => prev + 1);
+      console.log("Submit Data:", userCardInfo);
+    }
+  };
 
   return (
-  <div className=" h-screen w-screen bg-white flex justify-center items-center">
-
-    <div className=" h-fit w-[510px] flex flex-col">  
-
-    <h1 className="font-bold text-[24px] text-left mb-[26px]">Complete your profile page</h1>
-    <label className="mt-8 text-[14px] font-[500] mb-[8px]" htmlFor="avatar">Add photo</label>
-    <input id="avatar"  className="rounded-full border-[2px] border-gray-400 border-dashed h-[160px] w-[160px] mb-[24px]" type="file" accept="image"  />
-    <label htmlFor="name">Name</label>
-    <Input placeholder="Enter your name here" className="h-[40px] w-[510px] rounded-md py-[8px] px-[12px]" id="name"></Input>
-    <label className="text-[14px] mt-[12px]" htmlFor="about">About</label>
-   <Input className="h-[131px] w-[510px]" placeholder="Write about yourself here" id="about"></Input>
-    <label className="text-[14px] mt-[12px]" htmlFor="url">Social media URL</label>
-    <Input placeholder="https://" className="mb-[24px]" id="url"></Input>
-    <Button className="items-left w-[246px] h-[40px]" >Continue</Button>
-    
-
-    </div>
-
-
-
-  </div>
-  )
+    <> 
+      {currentStep === 1 && <CreateProfileStep1 userInfo={userInfo} error={error} onChange={onChange}  handleNext={handleNext}/>}
+      {currentStep === 2 && <CreateProfileStep2 userCardInfo={userCardInfo} cardError={cardError} onChangeStep2={onChangeStep2} handleSubmit={handleSubmit} />}
+      {currentStep === 3 && <Success />}
+      </>
+  );
 }
