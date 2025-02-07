@@ -74,7 +74,7 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
           About
         </label>
         <Input
-          className="h-[131px] w-[510px]"
+          className="h-[131px] max-w-[510px] text-start flex overflow-hidden truncate "
           placeholder="Write about yourself here"
           id="about"
           value={userInfo.about}
