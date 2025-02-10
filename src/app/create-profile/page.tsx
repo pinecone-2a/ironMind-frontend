@@ -3,14 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { CreateProfileStep1 } from "./stepOne";
 import { CreateProfileStep2 } from "./stepTwo";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Success from "./success";
+import { onPost } from "../_Components/hooks/useFetch";
+import { useSearchParams } from "next/navigation";
 
 export type UserInfo = {
-  image: string;
+  avatarImage: string;
   name: string;
   about: string;
-  socialURL: string;
+  socialMediaURL: string;
+  userId: string;
+  backgroundImage: string;
+  successMessage: string;
 
 };
 
@@ -19,17 +24,18 @@ export type userCardInfo = {
   firstName: string;
   lastName: string;
   cardNumber: string;
-  expires: string;
+  expiryDate: string;
   year: string;
   cvc: string;
+  userId: string;
 };
 
 
 type profilError = {
-  image: string;
+  avatarImage: string;
   name: string;
   about: string;
-  socialURL: string;
+  socialMediaURL: string;
 };
 
 type cardError = {
@@ -37,18 +43,23 @@ type cardError = {
   firstName: string;
   lastName: string;
   cardNumber: string;
-  expires: string;
+  expiryDate: string;
   year: string;
   cvc: string;
 }
 
 export default function CreateProfile() {
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const Id = searchParams.get("username");
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    image: "",
+    avatarImage: "",
     name: "",
     about: "",
-    socialURL: "",
+    socialMediaURL: "",
+    userId: Id || "",
+    backgroundImage: "",
+    successMessage: "",
   });
 
   const [userCardInfo, setUserCardInfo] = useState<userCardInfo>({
@@ -56,16 +67,17 @@ export default function CreateProfile() {
     firstName: "",
     lastName: "",
     cardNumber: "",
-    expires: "",
+    expiryDate: "",
     year: "2025",
     cvc: "",
+    userId: Id || ""
   })
 
   const [error, setError] = useState<profilError>({
-    image: "",
+    avatarImage: "",
     name: "",
     about: "",
-    socialURL: "",
+    socialMediaURL: "",
   });
 
   const [cardError, setCardError] = useState<cardError>({
@@ -73,10 +85,47 @@ export default function CreateProfile() {
     firstName: "",
     lastName: "",
     cardNumber: "",
-    expires: "",
+    expiryDate: "",
     year: "",
     cvc: "",
   });
+
+  // useEffect(() => {
+  //   if (!userName) return; 
+  
+  //   const fetchUserId = async () => {
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/user/getId?username=${encodeURIComponent(userName)}`);
+  //       if (!response.ok) {
+  //         throw new Error(`Error fetching user ID: ${response.statusText}`);
+  //       }
+  //       const data = await response.json();
+  
+  //       if (data && data.id) {
+  //         setId(data.id);
+  //         console.log("User ID:", data.id);
+  //       } else {
+  //         console.log("User not found or invalid response");
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch user ID:", error);
+  //     }
+  //   };
+  
+  //   fetchUserId();
+  // }, [userName]);
+  
+
+
+
+  
+
+  useEffect(() => {
+    console.log("Updated User ID:", Id);
+  }, [Id]);
+  
+
+
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -111,10 +160,10 @@ export default function CreateProfile() {
 
   const profileValidate = () => {
     const newErrors: profilError = {
-      image: userInfo.image ? "" : "Please enter image",
+      avatarImage: userInfo.avatarImage ? "" : "Please enter image",
       name: userInfo.name ? "" : "Please enter name",
       about: userInfo.about ? "" : "Please enter info about yourself",
-      socialURL: userInfo.socialURL ? "" : "Please enter a social link",
+      socialMediaURL: userInfo.socialMediaURL ? "" : "Please enter a social link",
     };
 
     setError(newErrors);
@@ -134,7 +183,7 @@ export default function CreateProfile() {
       firstName: nameRegex.test(userCardInfo.firstName) ? "" : "First name must match",
       lastName: nameRegex.test(userCardInfo.lastName) ? "" : "Last name must match",
       cardNumber: cardNumberRegex.test(userCardInfo.cardNumber) ? "" : "Invalid card number",
-      expires: monthRegex.test(userCardInfo.expires) ? "" : "Invalid month",
+      expiryDate: monthRegex.test(userCardInfo.expiryDate) ? "" : "Invalid month",
       year: yearRegex.test(userCardInfo.year) ? "" : "Invalid month",
       cvc: cvcRegex.test(userCardInfo.cvc) ? "" : "Invalid month",
     };
@@ -147,7 +196,8 @@ export default function CreateProfile() {
   const handleNext = () => {
     console.log("Checking")
     if (profileValidate()) {
-      console.log("Validation passed, moving to the next step.");
+      console.log(userInfo);
+      onPost("profile/", userInfo)
       setCurrentStep((prev) => prev + 1);
     } else {
       console.log("Validation failed, staying on the same step.");
@@ -159,6 +209,7 @@ export default function CreateProfile() {
   const handleSubmit = () => {
     if (cardValidate()) {
       setCurrentStep((prev) => prev + 1);
+      onPost("bankcard/", userCardInfo)
       console.log("Submit Data:", userCardInfo);
     }
   };

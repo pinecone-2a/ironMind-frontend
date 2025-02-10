@@ -13,12 +13,24 @@ export default function onGet(path: string) {
   }, []);
   return { data };
 }
+
+
 export const onPost = async (postPath: string, body: any) => {
-  fetch(`http://localhost:5000/${postPath}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  try {
+    const response = await fetch(`http://localhost:5000/${postPath}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error(`${response.status}`);
+    }
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+  }
 };
+

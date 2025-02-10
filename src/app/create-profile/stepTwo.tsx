@@ -9,7 +9,7 @@ interface ProfileStepProps {
     firstName: string;
     lastName: string;
     cardNumber: string;
-    expires: string;
+    expiryDate: string;
     year: string;
     cvc: string;
   };
@@ -18,7 +18,7 @@ interface ProfileStepProps {
     firstName: string;
     lastName: string;
     cardNumber: string;
-    expires: string;
+    expiryDate: string;
     year: string;
     cvc: string;
   };
@@ -59,9 +59,9 @@ export const CreateProfileStep2: React.FC<ProfileStepProps> = ({ userCardInfo, c
 
         <div className="flex w-full gap-3">
           <div className="flex flex-col w-1/3">
-            <label htmlFor="expires">Expires</label>
-            <Input id="expires" className="h-[40px] w-full" value={userCardInfo.expires} onChange={onChangeStep2} />
-            {cardError.expires && <p className="text-red-500 text-xs">{cardError.expires}</p>}
+            <label htmlFor="expiryDate">expiryDate</label>
+            <Input id="expiryDate" className="h-[40px] w-full" value={userCardInfo.expiryDate} onChange={onChangeStep2} />
+            {cardError.expiryDate && <p className="text-red-500 text-xs">{cardError.expiryDate}</p>}
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="year">Year</label>
