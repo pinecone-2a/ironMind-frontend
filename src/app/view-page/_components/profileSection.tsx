@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { FaHeart } from "react-icons/fa";
 
 export default function ProfileSection(){
     return(
@@ -24,7 +25,8 @@ export default function ProfileSection(){
 
             <div className="border rounded-md p-5 mt-5 bg-white">
                 <p className="font-semibold text-[16px]">Recent supporters</p>
-                <div className="w-[100%] h-[140px] border rounded-md flex justify-center items-center mt-4">
+                <div className="w-[100%] h-[140px] border rounded-md flex flex-col gap-5 justify-center items-center mt-4">
+                    <FaHeart className="w-[25px] h-[30px]"/>
                     <p className="font-semibold text-[16px]">Be the first one to support Jake</p>
                 </div>
             </div>
