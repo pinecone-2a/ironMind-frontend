@@ -8,10 +8,10 @@ import { UserInfo } from "./page";
 type ProfileStepProps = {
   userInfo: UserInfo;
   error: {
-    image: string;
+    avatarImage: string;
     name: string;
     about: string;
-    socialURL: string;
+    socialMediaURL: string;
   };
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleNext: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -27,7 +27,7 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
   
  
       onChange({
-        target: { id: "image", value: URL.createObjectURL(file) },
+        target: { id: "avatarImage", value: URL.createObjectURL(file) },
       } as ChangeEvent<HTMLInputElement>);
     }
   };
@@ -45,16 +45,16 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
           className="rounded-full border-[2px] border-gray-400 border-dashed h-[160px] w-[160px] mb-[24px]"
           htmlFor="avatar"
           style={
-            userInfo.image
+            userInfo.avatarImage
               ? {
-                  backgroundImage: `url(${userInfo.image})`,
+                  backgroundImage: `url(${userInfo.avatarImage})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }
               : {}
           }
         ></label>
-        {error.image && <p className="text-[#EF4444] font-[400] text-xs mb-[18px]">{error.image}</p>}
+        {error.avatarImage && <p className="text-[#EF4444] font-[400] text-xs mb-[18px]">{error.avatarImage}</p>}
 
         <input id="avatar" onChange={handleChange} type="file" accept="image/*" className="hidden" />
 
@@ -83,17 +83,17 @@ export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error
         {error.about && <p className="text-[#EF4444] font-[400] text-xs">{error.about}</p>}
 
 
-        <label className="text-[14px] mt-[12px]" htmlFor="socialURL">
+        <label className="text-[14px] mt-[12px]" htmlFor="socialMediaURL">
           Social media URL
         </label>
         <Input
           placeholder="https://"
           className="mb-[24px]"
-          id="socialURL"
-          value={userInfo.socialURL}
+          id="socialMediaURL"
+          value={userInfo.socialMediaURL}
           onChange={onChange}
         />
-        {error.socialURL && <p className="text-[#EF4444] font-[400] text-xs">{error.socialURL}</p>}
+        {error.socialMediaURL && <p className="text-[#EF4444] font-[400] text-xs">{error.socialMediaURL}</p>}
 
    
         <div className="flex justify-end">
