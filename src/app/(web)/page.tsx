@@ -22,15 +22,15 @@ interface Transaction {
   timeAgo: string;
 }
 
-function handleShareLink(setCopied:any) {
-  const pageUrl = "https://www.instagram.com/"; 
+function handleShareLink(setCopied: any) {
+  const pageUrl = "https://www.instagram.com/";
 
   navigator.clipboard
     .writeText(pageUrl)
     .then(() => {
       setCopied(true);
 
-      setTimeout(() => setCopied(false), 1000); 
+      setTimeout(() => setCopied(false), 1000);
     })
     .catch((err) => {
       alert("Failed to copy the link.");
@@ -108,7 +108,6 @@ export default function Dashboard() {
   const [copied, setCopied] = useState(false);
   const [earnings, setEarnings] = useState(450);
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
-  const [filterDay, setFilterDay] = useState()
 
   const filteredTransactions = filterAmount
     ? transactions.filter((t) => t.amount === filterAmount)
@@ -132,8 +131,9 @@ export default function Dashboard() {
             <div className="p-1">
               <button
                 onClick={() => handleShareLink(setCopied)}
-                className="bg-black text-white px-2 py-2 rounded-md flex">
-                <Copy className="p-2"/>
+                className="bg-black text-white px-2 py-2 rounded-md flex"
+              >
+                <Copy className="p-2" />
                 Share page link
               </button>
 
@@ -146,14 +146,15 @@ export default function Dashboard() {
             <h3 className="text-lg font-semibold">Earnings</h3>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="flex gap-4">
+                <Button className="flex gap-4 border border-solid bg-white text-black hover:bg-white ">
                   Last 30 days
                   <ChevronDown />
-                  {filterDay}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem onClick={() => setFilterDay("")}>Last 7 days</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => ""}>
+                  Last 7 days
+                </DropdownMenuItem>
                 <DropdownMenuItem>Last 30 days</DropdownMenuItem>
                 <DropdownMenuItem>Last 60 days</DropdownMenuItem>
               </DropdownMenuContent>
@@ -166,7 +167,7 @@ export default function Dashboard() {
             <h3 className="text-lg font-semibold">Recent transactions</h3>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="flex gap-4">
+                <Button className="flex gap-4 border border-dashed bg-white text-black hover:bg-white ">
                   Amount
                   <ChevronDown />
                 </Button>
@@ -210,7 +211,6 @@ export default function Dashboard() {
                 <p className="font-semibold text-green-400">
                   + ${transaction.amount}
                 </p>
-               
               </Card>
             ))}
           </div>
