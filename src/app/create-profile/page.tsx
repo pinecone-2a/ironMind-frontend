@@ -209,7 +209,7 @@ export default function CreateProfile() {
   const handleSubmit = () => {
     if (cardValidate()) {
       setCurrentStep((prev) => prev + 1);
-      onPost("bankcard/", userCardInfo)
+      onPost("bankcard/create", userCardInfo)
       console.log("Submit Data:", userCardInfo);
     }
   };

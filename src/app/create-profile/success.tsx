@@ -1,8 +1,20 @@
 "use client";
-import Player from "lottie-react"
-import coffee from "@/app/create-profile/coffee.json"; // Place your animation inside 'public' folder
+import { useEffect } from "react";
+import Player from "lottie-react";
+import coffee from "@/app/create-profile/coffee.json"; // Ensure the file path is correct
+import { useRouter } from "next/navigation";
 
 export default function LottieAnimation() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      router.push("/");
+    }, 5000); 
+
+    return () => clearTimeout(timeout);
+  }, [router]);
+
   return (
     <div className="flex justify-center items-center h-screen">
       <Player
@@ -14,3 +26,4 @@ export default function LottieAnimation() {
     </div>
   );
 }
+
