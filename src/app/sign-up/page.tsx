@@ -124,11 +124,17 @@ function EmailPasswordSignup({
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      const response = await onPost("user", data); 
-      console.log("User Created:", response);
 
-      router.push(`/create-profile?username=${encodeURIComponent(response.id)}`);
+    try {
+      const response = await fetch("http://localhost:5000/user/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+      const result = await response.json();
+      console.log("User Created:", result);
+
+      router.push(`/create-profile?username=${encodeURIComponent(result.user.id)}`);
     } catch (error) {
       console.error("Error creating user:", error);
     }

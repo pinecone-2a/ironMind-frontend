@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+
+
 import {
 DropdownMenu,
 DropdownMenuTrigger,
@@ -13,6 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronDown } from "lucide-react";
 import { Copy } from "lucide-react";
+import { useRouter } from "next/router";
 
 interface Transaction {
 name: string;
@@ -70,6 +74,7 @@ timeAgo: "2 days ago",
 ];
 
 export default function Dashboard() {
+
 const [earnings, setEarnings] = useState(450);
 const [filterAmount, setFilterAmount] = useState<number | null>(null);
 
@@ -77,7 +82,10 @@ const filteredTransactions = filterAmount
 ? transactions.filter((t) => t.amount === filterAmount)
 : transactions;
 
+
+
 return (
+ 
 <div className="min-h-screen text-white p-6">
 <div className="max-w-2xl mx-auto">
 <Card className=" p-6 rounded-lg shadow-lg">
@@ -169,5 +177,7 @@ className="p-4 rounded-lg flex justify-between items-start"
 </Card>
 </div>
 </div>
+
 );
 }
+

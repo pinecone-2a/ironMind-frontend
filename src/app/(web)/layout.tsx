@@ -1,6 +1,7 @@
 import { Navigation } from "./_Components/Navigation";
 import { SideBar } from "./_Components/SideBar";
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
