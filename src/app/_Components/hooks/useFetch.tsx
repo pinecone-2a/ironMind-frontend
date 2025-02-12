@@ -34,3 +34,22 @@ export const onPost = async (postPath: string, body: any) => {
   }
 };
 
+
+export const onPut = async (postPath: string, body: any) => {
+  try {
+    const response = await fetch(`http://localhost:5000/${postPath}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    return await response.json(); // Серверээс ирсэн өгөгдлийг JSON болгож буцаах
+  } catch (error) {
+    console.error("PUT request failed:", error);
+    return { success: false }; // Алдааны бүтэцтэй хариу буцаах
+  }
+};
+
+
