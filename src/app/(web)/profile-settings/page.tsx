@@ -1,3 +1,4 @@
+'use client'
 import { Camera } from "lucide-react";
 import {
   Select,
@@ -8,8 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 export default function Page() {
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    fetch("http://localhost:4500/user")
+      .then((res) => res.json())
+      .then((data) => setUser(data));
+  }, []);
+
+  console.log(user)
+  
   return (
     <div className="max-w-[672px] w-[650px] flex flex-col gap-8  ">
       <h1 className="text-2xl font-semibold">My account</h1>
