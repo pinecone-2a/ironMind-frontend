@@ -125,7 +125,7 @@ function EmailPasswordSignup({
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await onPost("user", data); 
+      const response = await onPost("user", data);
       console.log("User Created:", response);
 
       router.push(`/create-profile?username=${encodeURIComponent(response.id)}`);
