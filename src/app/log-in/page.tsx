@@ -15,6 +15,7 @@ import { Form,
   FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link";
+import { onPost } from "../_Components/hooks/useFetch"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -33,10 +34,9 @@ export default function EmailPasswordLogin({onClick}: {onClick: () => void;}) {
   })
 
 const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-  const res = await signIn("credentials", {
-    email: data.email,
-    password: data.password,
-  });
+
+  onPost("user/auth/sign-in", data); 
+  
   router.push("/")
   console.log("Form Data", data); 
 };
