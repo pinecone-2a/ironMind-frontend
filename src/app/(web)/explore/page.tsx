@@ -18,9 +18,6 @@ export default function Home() {
     const fetchProfiles = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/profiles"); 
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
         const data: Profile[] = await res.json(); 
         setProfiles(data);
       } catch (error) {
