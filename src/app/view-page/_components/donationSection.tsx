@@ -1,6 +1,6 @@
 import { VscCoffee } from "react-icons/vsc";
 
-export default function DonationSection() {
+export default function DonationScreen() {
     return(
         <div className="w-[628px] rounded-md border p-5 bg-white">
             <p className="text-[24px] font-semibold">Buy them a coffee</p>

@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { FaHeart } from "react-icons/fa";
+import { IoCloseOutline } from "react-icons/io5";
 
-export default function ProfileSection(){
+export default function ProfileScreen(){
     return(
         <div className="w-[632px] flex flex-col justify-between">
             <div className="border rounded-md p-5 bg-white">
