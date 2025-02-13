@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import cookies from "js-cookie";
+import { useCookies } from 'next-client-cookies';
+
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,8 +16,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronDown } from "lucide-react";
-import { Copy } from "lucide-react";
+import { ChevronDown, Copy } from "lucide-react";
+
+interface User {
+  username: string;
+  email: string;
+}
 
 interface Transaction {
   name: string;
@@ -20,141 +29,91 @@ interface Transaction {
   message?: string;
   amount: number;
   timeAgo: string;
-}
 
-function handleShareLink(setCopied: any) {
-  const pageUrl = "https://www.instagram.com/";
-
-  navigator.clipboard
-    .writeText(pageUrl)
-    .then(() => {
-      setCopied(true);
-
-      setTimeout(() => setCopied(false), 1000);
-    })
-    .catch((err) => {
-      alert("Failed to copy the link.");
-
-      console.error("Error", err);
-    });
 }
 
 const transactions: Transaction[] = [
-  {
-    name: "Azaa",
-    profileUrl: "buymeacoffee.com/kissyface",
-    amount: 2,
-    timeAgo: "10 mins ago",
-  },
-  {
-    name: "baagii",
-    profileUrl: "instagram.com/weleisley",
-    message: "Thank you for being so awesome everyday!",
-    amount: 1,
-    timeAgo: "5 hours ago",
-  },
-  {
-    name: "amaraa",
-    profileUrl: "buymeacoffee.com/bdsadas",
-    message: "Thank you for being so awesome everyday!",
-    amount: 10,
-    timeAgo: "10 hours ago",
-  },
-  {
-    name: "chinguun",
-    profileUrl: "buymeacoffee.com/gkfgrew",
-    amount: 2,
-    timeAgo: "1 day ago",
-  },
-  {
-    name: "orgil",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 5,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "aaaaa",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 10,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "jeqnf",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 5,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "hbqef",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 10,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "uhqef",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 1,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "aaawqe",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 2,
-    timeAgo: "2 days ago",
-  },
+  { name: "Azaa", profileUrl: "buymeacoffee.com/kissyface", amount: 2, timeAgo: "10 mins ago" },
+  { name: "baagii", profileUrl: "instagram.com/weleisley", message: "Thank you!", amount: 1, timeAgo: "5 hours ago" },
+  { name: "amaraa", profileUrl: "buymeacoffee.com/bdsadas", message: "Thank you!", amount: 10, timeAgo: "10 hours ago" },
 ];
 
 export default function Dashboard() {
-  const [copied, setCopied] = useState(false);
+  // const cookies = useCookies()
+  const [user, setUser] = useState<User | null>(null);
   const [earnings, setEarnings] = useState(450);
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        console.log(document.cookie, cookies.get())
+        
+        const res = await fetch("http://localhost:5000/user/profile", {
+            method: "POST",
+          credentials: "include",
+          headers:{ Cookie: cookies.get().toString() }
+        });
+
+        if (!res.ok) {
+          throw new Error("Unauthorized");
+        }
+
+        const data = await res.json();
+        console.log(data)
+        setUser(data.user);
+      
+
+        router.push("/")
+      } catch (error) {
+        router.push("/log-in"); // Redirect to login if unauthorized
+      }
+    }
+
+    fetchUser();
+  }, []);
+
 
   const filteredTransactions = filterAmount
     ? transactions.filter((t) => t.amount === filterAmount)
     : transactions;
 
+
+  if (!user) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <div className="h-screen text-white p-6">
-      <div className="w-[1000px] h-screen mx-auto">
-        <Card className=" p-6 rounded-lg shadow-lg">
+    <div className="min-h-screen text-white p-6">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-black text-[20px]">{user.email}</h1>
+        <Card className="p-6 rounded-lg shadow-lg">
           <div className="mt-4 flex justify-between items-center">
-            <div className="flex items-center gap-6">
+            <div>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback></AvatarFallback>
               </Avatar>
-              <div>
-                <h2 className="text-lg font-semibold">Azaa</h2>
-                <p className="text-gray-400">buymeacoffee.com/baconpancakes1</p>
-              </div>
+              <h2 className="text-lg font-semibold"></h2>
+              <p className="text-gray-400"></p>
             </div>
-            <div className="p-1">
-              <button
-                onClick={() => handleShareLink(setCopied)}
-                className="bg-black text-white px-2 py-2 rounded-md flex"
-              >
-                <Copy className="p-2" />
-                Share page link
-              </button>
-
-              {copied && (
-                <p className="text-green-500 mt-2 text-sm">✅ Link copied!</p>
-              )}
-            </div>
+            <Button className="flex gap-4">
+              <Copy />
+              Share page link
+            </Button>
           </div>
           <div className="mt-4 flex justify-between items-center">
             <h3 className="text-lg font-semibold">Earnings</h3>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="flex gap-4 border border-solid bg-white text-black hover:bg-white ">
+                <Button className="flex gap-4">
                   Last 30 days
                   <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem onClick={() => ""}>
-                  Last 7 days
-                </DropdownMenuItem>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Last 7 days</DropdownMenuItem>
                 <DropdownMenuItem>Last 30 days</DropdownMenuItem>
                 <DropdownMenuItem>Last 60 days</DropdownMenuItem>
               </DropdownMenuContent>
@@ -167,7 +126,7 @@ export default function Dashboard() {
             <h3 className="text-lg font-semibold">Recent transactions</h3>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="flex gap-4 border border-dashed bg-white text-black hover:bg-white ">
+                <Button className="flex gap-4">
                   Amount
                   <ChevronDown />
                 </Button>
@@ -177,9 +136,7 @@ export default function Dashboard() {
                   <DropdownMenuItem key={amount}>
                     <Checkbox
                       checked={filterAmount === amount}
-                      onCheckedChange={() =>
-                        setFilterAmount(filterAmount === amount ? null : amount)
-                      }
+                      onCheckedChange={() => setFilterAmount(filterAmount === amount ? null : amount)}
                     />
                     <span className="ml-2">${amount}</span>
                   </DropdownMenuItem>
@@ -187,31 +144,17 @@ export default function Dashboard() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-
-          <div className="mt-4 space-y-4 overflow-y-auto max-h-[520px]">
+          <div className="mt-4 space-y-4">
             {filteredTransactions.map((transaction, index) => (
-              <Card
-                key={index}
-                className="p-4 rounded-lg flex justify-between items-start"
-              >
+              <Card key={index} className="p-4 rounded-lg flex justify-between items-start">
                 <div>
                   <p className="font-semibold text-black">{transaction.name}</p>
-                  <p className="text-gray-400 text-sm">
-                    {transaction.profileUrl}
-                  </p>
-                  {transaction.message && (
-                    <p className="text-gray-300 mt-1 text-sm">
-                      {transaction.message}
-                    </p>
-                  )}
-                  <p className="text-gray-400 text-xs mt-1">
-                    {transaction.timeAgo}
-                  </p>
+                  <p className="text-gray-400 text-sm">{transaction.profileUrl}</p>
+                  {transaction.message && <p className="text-gray-300 mt-1 text-sm">{transaction.message}</p>}
+                  <p className="text-gray-400 text-xs mt-1">{transaction.timeAgo}</p>
                 </div>
-                <p className="font-semibold text-green-400">
-                  + ${transaction.amount}
-                </p>
-              </Card>
+                <p className="font-semibold text-green-400">+ ${transaction.amount}</p>
+                </Card>
             ))}
           </div>
         </Card>

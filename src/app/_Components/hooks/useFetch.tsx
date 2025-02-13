@@ -22,6 +22,7 @@ export const onPost = async (postPath: string, body: any) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
       body: JSON.stringify(body),
     });
 
@@ -31,6 +32,7 @@ export const onPost = async (postPath: string, body: any) => {
     const data = await response.json();
     return data; 
   } catch (error) {
+   return error;
   }
 };
 
