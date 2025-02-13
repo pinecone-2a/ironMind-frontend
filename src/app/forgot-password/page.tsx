@@ -43,7 +43,7 @@ export default function ForgotPassword() {
           className="h-screen"
         />
       </div>
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="flex justify-center items-center min-h-screen">
         <Card className="w-96 p-6 shadow-lg">
           <CardContent>
             <h2 className="text-xl font-semibold text-center mb-4">Forgot Password</h2>
@@ -62,7 +62,7 @@ export default function ForgotPassword() {
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Processing..." : "Reset Password"}
               </Button>
-              {error && <p className="text-green-500 text-sm mt-2">{error}</p>}
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </form>
           </CardContent>
         </Card>
