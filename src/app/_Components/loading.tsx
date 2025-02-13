@@ -28,7 +28,7 @@ export function LazyLottie<T extends Record<string, unknown>>({
 
 const CoffeeLoading = () => (
   <LazyLottie
-    getJson={() => import("@/components/ui/coffee.json")}
+    getJson={() => import("./coffee.json")}
     loop
     id="empty-box"
     width={120}
