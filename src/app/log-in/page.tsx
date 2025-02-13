@@ -31,7 +31,7 @@ const formSchema = z.object({
 
 
 export default function EmailPasswordLogin() {
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "", password: "" },
