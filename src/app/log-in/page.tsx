@@ -35,6 +35,7 @@ export default function EmailPasswordLogin({onClick}: {onClick: () => void;}) {
 
 const handleSubmit = async (data: z.infer<typeof formSchema>) => {
 
+  
   onPost("user/auth/sign-in", data); 
   
   router.push("/")

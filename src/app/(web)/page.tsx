@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
 import cookies from "js-cookie";
+import { useCookies } from 'next-client-cookies';
+
 
 import {
   DropdownMenu,
@@ -37,6 +38,7 @@ const transactions: Transaction[] = [
 ];
 
 export default function Dashboard() {
+  // const cookies = useCookies()
   const [user, setUser] = useState<User | null>(null);
   const [earnings, setEarnings] = useState(450);
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
@@ -45,6 +47,8 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchUser() {
       try {
+        console.log(document.cookie, cookies.get())
+        
         const res = await fetch("http://localhost:5000/user/profile", {
             method: "POST",
           credentials: "include",
@@ -58,6 +62,7 @@ export default function Dashboard() {
         const data = await res.json();
         console.log(data)
         setUser(data.user);
+      
 
         router.push("/")
       } catch (error) {
@@ -79,15 +84,16 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-white p-6">
       <div className="max-w-2xl mx-auto">
+        <h1 className="text-black text-[20px]">{user.email}</h1>
         <Card className="p-6 rounded-lg shadow-lg">
           <div className="mt-4 flex justify-between items-center">
             <div>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
+                <AvatarFallback></AvatarFallback>
               </Avatar>
-              <h2 className="text-lg font-semibold">{user.username}</h2>
-              <p className="text-gray-400">{user.email}</p>
+              <h2 className="text-lg font-semibold"></h2>
+              <p className="text-gray-400"></p>
             </div>
             <Button className="flex gap-4">
               <Copy />
