@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+import cookies from "js-cookie";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -43,8 +45,10 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("http://localhost:5000/user/token", {
-          credentials: "include", // Ensures cookies (tokens) are sent
+        const res = await fetch("http://localhost:5000/user/profile", {
+            method: "POST",
+          credentials: "include",
+          headers:{ Cookie: cookies.get().toString() }
         });
 
         if (!res.ok) {
@@ -52,7 +56,9 @@ export default function Dashboard() {
         }
 
         const data = await res.json();
+        console.log(data)
         setUser(data.user);
+
         router.push("/")
       } catch (error) {
         router.push("/log-in"); // Redirect to login if unauthorized
