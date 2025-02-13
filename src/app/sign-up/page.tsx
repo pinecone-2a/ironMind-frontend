@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { onPost } from "../_Components/hooks/useFetch";
-import { useRouter } from "next/navigation"; // ✅ Fix: Correct Import
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function UsernameSignup({ onClick }: { onClick: () => void }) {
+export default function UsernameSignup() {
   const [step, setStep] = useState(1);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,7 +62,9 @@ export default function UsernameSignup({ onClick }: { onClick: () => void }) {
         <div className="h-screen w-[80%] justify-center items-center flex relative">
           {step === 1 && (
             <div className="flex flex-col items-start">
-              <p className="font-semibold text-[24px] mb-2">Create your account</p>
+              <p className="font-semibold text-[24px] mb-2">
+                Create your account
+              </p>
               <p className="text-[#71717A] text-[14px] mb-4">
                 Choose a username for your page
               </p>
@@ -89,10 +91,7 @@ export default function UsernameSignup({ onClick }: { onClick: () => void }) {
             </div>
           )}
           {step === 2 && (
-            <EmailPasswordSignup
-              username={form.getValues("username")}
-              onClick={onClick}
-            />
+            <EmailPasswordSignup username={form.getValues("username")} />
           )}
           <Link href="/log-in">
             <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">
@@ -105,13 +104,7 @@ export default function UsernameSignup({ onClick }: { onClick: () => void }) {
   );
 }
 
-function EmailPasswordSignup({
-  username,
-  onClick,
-}: {
-  username: string;
-  onClick: () => void;
-}) {
+function EmailPasswordSignup({ username }: { username: string }) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -126,6 +119,7 @@ function EmailPasswordSignup({
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
 
     try {
+
       const response = await fetch("http://localhost:5000/user/auth/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -135,6 +129,7 @@ function EmailPasswordSignup({
       console.log("User Created:", result);
 
       router.push(`/create-profile?username=${encodeURIComponent(result.user.id)}`);
+
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -149,7 +144,10 @@ function EmailPasswordSignup({
             Connect email and set a password
           </p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 w-[140%]">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-8 w-[140%]"
+            >
               <FormField
                 control={form.control}
                 name="email"
@@ -170,13 +168,19 @@ function EmailPasswordSignup({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Enter password here" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Enter password here"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button className="w-[100%]" type="submit">Continue</Button>
+              <Button className="w-[100%]" type="submit">
+                Continue
+              </Button>
             </form>
           </Form>
         </div>

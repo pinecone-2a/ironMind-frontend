@@ -29,6 +29,7 @@ interface Transaction {
   message?: string;
   amount: number;
   timeAgo: string;
+
 }
 
 const transactions: Transaction[] = [
@@ -73,9 +74,11 @@ export default function Dashboard() {
     fetchUser();
   }, []);
 
+
   const filteredTransactions = filterAmount
     ? transactions.filter((t) => t.amount === filterAmount)
     : transactions;
+
 
   if (!user) {
     return <p>Loading...</p>;
@@ -151,7 +154,7 @@ export default function Dashboard() {
                   <p className="text-gray-400 text-xs mt-1">{transaction.timeAgo}</p>
                 </div>
                 <p className="font-semibold text-green-400">+ ${transaction.amount}</p>
-              </Card>
+                </Card>
             ))}
           </div>
         </Card>
