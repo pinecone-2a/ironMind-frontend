@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,79 +39,29 @@ function handleShareLink(setCopied: any) {
     });
 }
 
-const transactions: Transaction[] = [
-  {
-    name: "Azaa",
-    profileUrl: "buymeacoffee.com/kissyface",
-    amount: 2,
-    timeAgo: "10 mins ago",
-  },
-  {
-    name: "baagii",
-    profileUrl: "instagram.com/weleisley",
-    message: "Thank you for being so awesome everyday!",
-    amount: 1,
-    timeAgo: "5 hours ago",
-  },
-  {
-    name: "amaraa",
-    profileUrl: "buymeacoffee.com/bdsadas",
-    message: "Thank you for being so awesome everyday!",
-    amount: 10,
-    timeAgo: "10 hours ago",
-  },
-  {
-    name: "chinguun",
-    profileUrl: "buymeacoffee.com/gkfgrew",
-    amount: 2,
-    timeAgo: "1 day ago",
-  },
-  {
-    name: "orgil",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 5,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "aaaaa",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 10,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "jeqnf",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 5,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "hbqef",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 10,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "uhqef",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 1,
-    timeAgo: "2 days ago",
-  },
-  {
-    name: "aaawqe",
-    profileUrl: "facebook.com/penelpoeb",
-    amount: 2,
-    timeAgo: "2 days ago",
-  },
-];
-
 export default function Dashboard() {
   const [copied, setCopied] = useState(false);
-  const [earnings, setEarnings] = useState(450);
+  const [earnings, setEarnings] = useState();
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
+  const [transaction, setTransaction] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const userId = "1";
+
+    fetch(`/api/total-earnings/${userId}`)
+      .then((Response) => Response.json())
+      .then((data) => setEarnings(earnings))
+      .catch((err) => console.error("ERROR", err));
+
+    fetch(`/api/donation/recieved${userId}`)
+      .then((Response) => Response.json())
+      .then((data) => setTransaction(data))
+      .catch((err) => console.error("ERROR", err));
+  }, []);
 
   const filteredTransactions = filterAmount
-    ? transactions.filter((t) => t.amount === filterAmount)
-    : transactions;
+    ? transaction.filter((t) => t.amount === filterAmount)
+    : transaction;
 
   return (
     <div className="h-screen text-white p-6">
