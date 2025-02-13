@@ -23,6 +23,10 @@ export function LazyLottie<T extends Record<string, unknown>>({
     getJson().then((json: any) => setData(json));
   }, [getJson]);
 
+  if (!data) {
+    return <></>;
+  }
+
   return <LazyLottieComponent animationData={data} {...props} />;
 }
 
