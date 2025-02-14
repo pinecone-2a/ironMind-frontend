@@ -41,22 +41,70 @@ function handleShareLink(setCopied: any) {
 
 export default function Dashboard() {
   const [copied, setCopied] = useState(false);
+  const user = { id: "USER_ID" };
   const [earnings, setEarnings] = useState();
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
   const [transaction, setTransaction] = useState<Transaction[]>([]);
+  const [donors, setDonors] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    const userId = "1";
+    async function fetchDonors() {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/donations/latest-donors/${user?.id}`,
+          {
+            credentials: "include",
+          }
+        );
 
-    fetch(`/api/total-earnings/${userId}`)
-      .then((Response) => Response.json())
-      .then((data) => setEarnings(earnings))
-      .catch((err) => console.error("ERROR", err));
+        if (!res.ok) throw new Error("ERROR");
 
-    fetch(`/api/donation/recieved${userId}`)
-      .then((Response) => Response.json())
-      .then((data) => setTransaction(data))
-      .catch((err) => console.error("ERROR", err));
+        const data = await res.json();
+        setDonors(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (user) fetchDonors();
+  }, [user]);
+
+  useEffect(() => {
+    async function fetchTransactions() {
+      try {
+        const USER_ID = "USER_ID";
+        const res = await fetch(
+          `http://localhost:5000/donation/received/${user?.id}`
+        );
+        const data = await res.json();
+        console.log("Transactions:", data);
+
+        const formattedTransactions = data.map((donation: any) => ({
+          name: `Guest`,
+          profileUrl: donation.socialURLOrBuyMeACoffee || "N/A",
+          message: donation.specialMessage,
+          amount: donation.amount,
+          timeAgo: "Just now",
+        }));
+
+        setTransaction(formattedTransactions);
+      } catch (error) {
+        console.error("ERROR", error);
+      }
+    }
+
+    async function fetchEarnings() {
+      try {
+        const res = await fetch(`http://localhost:5000/total-earnings/${user?.id}`);
+        const data = await res.json();
+        setEarnings(data.earnings);
+      } catch (error) {
+        console.error("Error fetching earnings:", error);
+      }
+    }
+
+    fetchTransactions();
+    fetchEarnings();
   }, []);
 
   const filteredTransactions = filterAmount
@@ -145,7 +193,9 @@ export default function Dashboard() {
                 className="p-4 rounded-lg flex justify-between items-start"
               >
                 <div>
-                  <p className="font-semibold text-black">{transaction.name}</p>
+                  <p className="font-semibold text-black">
+                    {transaction.name || "Guest"}
+                  </p>
                   <p className="text-gray-400 text-sm">
                     {transaction.profileUrl}
                   </p>
