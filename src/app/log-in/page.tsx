@@ -42,8 +42,10 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
 
   
   onPost("user/auth/sign-in", data); 
-  
-  router.push("/")
+  setTimeout(() => {
+    router.push("/")
+  }, 3000)
+
   console.log("Form Data", data); 
 };
 
@@ -91,6 +93,8 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
                     </FormItem>
                   )}
                 />
+                <Link href="forgot-password">     <div className="text-center">Reset Password</div> </Link>
+      
                 <Button className="w-[100%]">Continue</Button>
               </form>
             </Form>

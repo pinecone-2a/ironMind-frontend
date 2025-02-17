@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/profiles"); 
+        const res = await fetch("http://localhost:5000/profile"); 
         const data: Profile[] = await res.json(); 
         setProfiles(data);
       } catch (error) {
@@ -27,6 +27,11 @@ export default function Home() {
 
     fetchProfiles();
   }, []); 
+
+
+  
+    
+  
 
   return (
     <>
