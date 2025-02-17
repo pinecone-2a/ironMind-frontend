@@ -57,7 +57,7 @@ export default function Dashboard() {
           }
         );
 
-        if (!res.ok) throw new Error("ERROR");
+        if (!res.ok) Error("ERROR");
 
         const data = await res.json();
         setDonors(data);
@@ -74,7 +74,7 @@ export default function Dashboard() {
       try {
         const USER_ID = "USER_ID";
         const res = await fetch(
-          `http://localhost:5000/donation/received/${user?.id}`
+          `http://localhost:5000/donation/received/${USER_ID}`
         );
         const data = await res.json();
         console.log("Transactions:", data);
@@ -86,10 +86,11 @@ export default function Dashboard() {
           amount: donation.amount,
           timeAgo: "Just now",
         }));
-
+        console.log()
         setTransaction(formattedTransactions);
       } catch (error) {
         console.error("ERROR", error);
+        console.log(user?.id)
       }
     }
 
