@@ -100,10 +100,10 @@ export default function Dashboard() {
   }, [user]);
 
  
-
+  
   const filteredDonations = filterAmount
-    ? transactions.filter((t) => t.amount === filterAmount)
-    : transactions;
+    ? donation.filter((t: { amount: number; }) => t.amount === filterAmount)
+    : donation;
 
 
   if (!user) {
@@ -172,7 +172,7 @@ export default function Dashboard() {
             </DropdownMenu>
           </div>
           <div className="mt-4 space-y-4">
-            {donation.map((transaction: any, index: any) => (
+            {filteredDonations.map((transaction: any, index: any) => (
               <Card key={index} className="p-4 rounded-lg flex justify-between items-start">
                 <div>
                   <p className="font-semibold text-black">{transaction.name}</p>
