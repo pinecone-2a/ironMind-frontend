@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import { onPost } from "../_Components/hooks/useFetch"
 import { Button } from "@/components/ui/button"
 import { Form,
   FormControl,
@@ -29,6 +29,7 @@ export default function EmailPasswordLogin({onClick}: {onClick: () => void;}) {
   })
 
 const handleSubmit = (data: z.infer<typeof formSchema>) => {
+  onPost("user/auth/sign-in", data);
   console.log("Form Data", data); 
 };
 
