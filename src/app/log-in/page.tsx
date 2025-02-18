@@ -6,8 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { onPost } from "../_Components/hooks/useFetch"
-
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
@@ -50,11 +48,6 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     router.push("/")
   }, 3000)
 
-
-const handleSubmit = (data: z.infer<typeof formSchema>) => {
-  onPost("user/auth/sign-in", data);
-
-  console.log("Form Data", data); 
 };
 
 
