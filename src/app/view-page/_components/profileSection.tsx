@@ -1,8 +1,8 @@
 
 'use client'
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Button } from '@/components/ui/button'; 
+import { useState, useEffect } from 'react'; 
+import { useRouter } from 'next/router'
+import { Button } from '@/components/ui/button';
 import { FaHeart } from "react-icons/fa";
 
 interface Profile {
@@ -24,9 +24,9 @@ export default function ProfilePage() {
     const file = e.target.files?.[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      setImage(imageURL);  
+      setImage(imageURL);
     } else {
-      setImage(null); 
+      setImage(null);
     }
   };
 
@@ -36,12 +36,12 @@ export default function ProfilePage() {
         try {
           const res = await fetch(`http://localhost:5000/api/profile/${id}`);
           const data = await res.json();
-          setProfile(data); 
+          setProfile(data);
         } catch (error) {
           console.error('Failed to fetch profile:', error);
-        }
+        } 
       }
-    };
+    }
 
     fetchProfile();
   }, [id]);
