@@ -36,12 +36,28 @@ type Transaction = {
 };
 
 
-
+function ShareLink(setCopied: any) {
+  const pageUrl = "https://www.instagram.com/";
+ 
+  navigator.clipboard
+    .writeText(pageUrl)
+    .then(() => {
+      setCopied(true);
+ 
+      setTimeout(() => setCopied(false), 1000);
+    })
+    .catch((err) => {
+      alert("Failed to copy the link.");
+ 
+      console.error("Error", err);
+    });
+}
+ 
 export default function Dashboard() {
   // const cookies = useCookies()
   const [user, setUser] = useState<any>();
   const [donation, setDonation] = useState<any>([])
-
+const [copied, setCopied] = useState(false)
   const [totalEarning, setTotalEarning] = useState<number>()
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
   const router = useRouter();
@@ -90,8 +106,8 @@ export default function Dashboard() {
   
     async function fetchUserData() {
       try {
-        const response = await fetch(`http://localhost:5000/donation/received/${user}`);
-        const totalEarning = await fetch(`http://localhost:5000/donation/total-earnings/${user}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/donation/received/${user}`);
+        const totalEarning = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/donation/total-earnings/${user}`);
         
 
         const totalEarningResult = await totalEarning.json()

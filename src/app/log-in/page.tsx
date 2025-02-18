@@ -1,10 +1,8 @@
-
-
-
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+
 
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -47,8 +45,11 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
   setTimeout(() => {
     router.push("/")
   }, 3000)
+}
+
 
 };
+
 
 
   return (

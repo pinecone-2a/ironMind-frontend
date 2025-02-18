@@ -34,7 +34,7 @@ export default function ProfilePage() {
     const fetchProfile = async () => {
       if (id) {
         try {
-          const res = await fetch(`http://localhost:5000/api/profile/${id}`);
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/profile/${id}`);
           const data = await res.json();
           setProfile(data);
         } catch (error) {

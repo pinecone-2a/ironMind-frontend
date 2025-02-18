@@ -120,7 +120,7 @@ function EmailPasswordSignup({ username }: { username: string }) {
 
     try {
 
-      const response = await fetch("http://localhost:5000/user/auth/sign-up", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/auth/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
