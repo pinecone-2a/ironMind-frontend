@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const res = await fetch("http://localhost:5000/profile"); 
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile`); 
         const data: Profile[] = await res.json(); 
         setProfiles(data);
       } catch (error) {
