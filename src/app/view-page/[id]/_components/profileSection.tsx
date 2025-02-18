@@ -1,7 +1,7 @@
 
 'use client'
 import { useState, useEffect } from 'react'; 
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button';
 import { FaHeart } from "react-icons/fa";
 
@@ -15,8 +15,8 @@ interface Profile {
 }
 
 export default function ProfilePage() {
-  const router = useRouter();
-  const { id } = router.query;
+  const router = useParams();
+  const { id } = router
   const [profile, setProfile] = useState<Profile | null>(null);
   const [image, setImage] = useState<string | null>(null);
 
@@ -34,8 +34,13 @@ export default function ProfilePage() {
     const fetchProfile = async () => {
       if (id) {
         try {
+<<<<<<< HEAD
           const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/profile/${id}`);
+=======
+          const res = await fetch(`http://localhost:5000/profile/${id}`);
+>>>>>>> 62eef93 (update)
           const data = await res.json();
+          console.log(data)
           setProfile(data);
         } catch (error) {
           console.error('Failed to fetch profile:', error);
