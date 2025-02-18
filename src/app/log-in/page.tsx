@@ -54,16 +54,6 @@ export default function EmailPasswordLogin() {
 
 const handleSubmit = async (data: z.infer<typeof formSchema>) => {
   
-<<<<<<< HEAD
-  onPost("user/auth/sign-in", data); 
-  setTimeout(() => {
-    router.push("/")
-  }, 3000)
-}
-
-=======
-  
-
   setLoading(true)
   try{
     await onPost("user/auth/sign-in", data);
@@ -74,10 +64,7 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(false)
 
   }
-  
->>>>>>> 62eef93 (update)
-
-};
+}
 if(loading) {
   return(
     <div className="flex justify-center items-center h-screen">
@@ -154,4 +141,5 @@ if(loading) {
 
 
   );
-}
+
+};
