@@ -27,12 +27,7 @@ export default function Home() {
 
     fetchProfiles();
   }, []); 
-
-
   
-    
-  
-
   return (
     <>
       <div className="w-[957px] h-[880px] p-5 ml-auto mr-auto mb-5">
@@ -64,7 +59,7 @@ export default function Home() {
 
             <div className="flex justify-between mt-4">
               <div className="flex flex-col w-[420px] gap-3">
-                <p className="font-semibold">About the creator</p>
+                <p className="font-semibold">About {profile.name}</p>
                 <p className="text-[14px]">{profile.about}</p>
               </div>
 
