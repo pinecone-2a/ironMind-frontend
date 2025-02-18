@@ -19,6 +19,10 @@ import { Form,
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { onPost } from "../_Components/hooks/useFetch"
+import { useEffect, useState } from "react"
+import cookies from "js-cookie"
+import CoffeeLoading from "../_Components/loading"
+
 
 const formSchema = z.object({
   email: z.string().email({
@@ -31,25 +35,57 @@ const formSchema = z.object({
 
 
 export default function EmailPasswordLogin() {
+
+  
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "", password: "" },
   });
 
+  useEffect(() => {
+    const token = cookies.get("accessToken");
+
+    if (token) {
+      router.push("/"); // Redirect to homepage or dashboard if already logged in
+    }
+  }, []);
 
 const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-
   
+<<<<<<< HEAD
   onPost("user/auth/sign-in", data); 
   setTimeout(() => {
     router.push("/")
   }, 3000)
 }
 
+=======
+  
+
+  setLoading(true)
+  try{
+    await onPost("user/auth/sign-in", data);
+    setTimeout(() => {
+      router.push("/")
+    }, 3000)
+  } catch (error) {
+    setLoading(false)
+
+  }
+  
+>>>>>>> 62eef93 (update)
 
 };
+if(loading) {
+  return(
+    <div className="flex justify-center items-center h-screen">
+    <CoffeeLoading/>
+    </div>
+  )
 
+}
 
 
   return (
@@ -97,17 +133,25 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
                 />
                 <Link href="forgot-password">     <div className="text-center">Reset Password</div> </Link>
       
-                <Button className="w-[100%]">Continue</Button>
+                <Button className="w-[100%]"> {loading ? (
+            <div className="flex items-center justify-center w-5 h-5 border-4 border-t-4 border-blue-500 rounded-full animate-spin" />
+          ) : (
+            "Submit"
+          )}
+          </Button>
               </form>
             </Form>
           </div>
           <Link href="/sign-up">
-            <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">
-              Sign up
+            <button  className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">
+                Sign-up
             </button>
           </Link>
         </div>
       </div>
     </div>
+
+
+
   );
 }

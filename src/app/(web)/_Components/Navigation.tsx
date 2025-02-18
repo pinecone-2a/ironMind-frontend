@@ -18,9 +18,13 @@ export const Navigation = () => {
  
 
  async function logout() {  
-  router.push("log-in") 
+  router.push("/log-in") 
   try {
+<<<<<<< HEAD
     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout/`, {
+=======
+    await fetch("http://localhost:5000/user/logout", {
+>>>>>>> 62eef93 (update)
       method: "POST",
       credentials: "include"
     })
