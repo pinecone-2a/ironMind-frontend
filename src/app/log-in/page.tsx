@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 
-
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
@@ -48,6 +47,8 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
   }, 3000)
 }
 
+
+};
 
 
 

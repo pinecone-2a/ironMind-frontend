@@ -88,7 +88,7 @@ const [copied, setCopied] = useState(false)
         const data = await res.json();
 
         console.log(data);
-        setUser(data.user);
+        setUser(data.user.userId.id);
 
         router.push("/");
       } catch (error) {
@@ -152,14 +152,14 @@ const [copied, setCopied] = useState(false)
               <h2 className="text-lg font-semibold"></h2>
               <p className="text-gray-400"></p>
             </div>
-            <div>
+            {/* <div>
             <Button onClick={() => ShareLink(setCopied)} className="flex gap-4">
               <Copy />
               Share page link
             </Button>
             {copied && (
               <p className="text-green-500 mt-2 text-sm text-center">✅ Link copied!</p>
-            )}</div>
+            )}</div> */}
 
           </div>
           <div className="mt-4 flex justify-between items-center">
