@@ -13,6 +13,7 @@ import { LogOut } from "lucide-react";
 import { Settings } from "lucide-react";
 import { HelpCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 export const Navigation = () => {
   const router = useRouter()
  
@@ -20,11 +21,7 @@ export const Navigation = () => {
  async function logout() {  
   router.push("/log-in") 
   try {
-<<<<<<< HEAD
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout/`, {
-=======
-    await fetch("http://localhost:5000/user/logout", {
->>>>>>> 62eef93 (update)
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout`, {
       method: "POST",
       credentials: "include"
     })
@@ -38,10 +35,12 @@ export const Navigation = () => {
 
   return (
     <div className="flex justify-between h-full px-24 py-8">
-      <div className="flex gap-2 text-black text-xl font-extrabold ">
+     <Link href={'/'}>
+     <div className="flex gap-2 text-black text-xl font-extrabold ">
         <Coffee />
         <h1>Buy Me Coffee</h1>
       </div>
+     </Link>
       <div className="flex gap-10 ">
         <button className="flex justify-between items-center">
           <Avatar>

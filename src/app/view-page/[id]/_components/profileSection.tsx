@@ -1,9 +1,10 @@
 
 'use client'
 import { useState, useEffect } from 'react'; 
-import { useParams, useRouter } from 'next/navigation'
+
 import { Button } from '@/components/ui/button';
 import { FaHeart } from "react-icons/fa";
+import { useParams } from 'next/navigation';
 
 interface Profile {
   id: string;
@@ -34,14 +35,10 @@ export default function ProfilePage() {
     const fetchProfile = async () => {
       if (id) {
         try {
-<<<<<<< HEAD
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/profile/${id}`);
-=======
-          const res = await fetch(`http://localhost:5000/profile/${id}`);
->>>>>>> 62eef93 (update)
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${id}`);
           const data = await res.json();
           console.log(data)
-          setProfile(data);
+          setProfile(data.profile);
         } catch (error) {
           console.error('Failed to fetch profile:', error);
         } 
@@ -50,6 +47,7 @@ export default function ProfilePage() {
 
     fetchProfile();
   }, [id]);
+  console.log(profile)
 
   if (!profile) {
     return <div>Loading...</div>;
@@ -120,6 +118,7 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

@@ -31,26 +31,7 @@ export default function Page() {
   return (
     <>
       <Navigation />
-      <div className="w-screen h-[319px] bg-[#F4F4F5] flex justify-center items-center relative">
-        {!image?(
-          <>
-            <input
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-              type="file"
-            />
-            <Button>Add a cover image</Button>
-          </>   
-        ):(
-          <img
-            src={image}
-            className="bg-cover object-cover rounded-md w-full h-full" 
-          />
-        )}
-      </div>
-
-      <div className="w-full flex gap-8 justify-center absolute mt-[-3%]">
+      <div className="w-full flex gap-8 justify-center absolute ">
         <ProfileScreen />
         <DonationScreen />
       </div>
