@@ -1,3 +1,4 @@
+"use client";
 import { Camera } from "lucide-react";
 import {
   Select,
@@ -8,9 +9,56 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import cookies from "js-cookie";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+  const [userId, setUserId] = useState<any>();
+  const [profile, setProfile] = useState<any>();
+  const [bankCard, setBankCard] = useState<any>();
+  console.log(bankCard)
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        console.log(document.cookie, cookies.get());
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: { Cookie: cookies.get().toString() },
+          }
+        );
+
+        const data = await res.json();
+        setUserId(data.user.userId.id);
+      } catch (error) {
+        console.error("Authentication error:", error);
+      }
+    }
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${userId}`
+        );
+        const data = await res.json();
+        setProfile(data?.profile);
+        setBankCard(data?.bankCard);
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+      }
+    }
+
+    fetchProfile();
+  }, [userId]);
+
   return (
     <div className="max-w-[672px] w-[650px] flex flex-col gap-8  ">
       <h1 className="text-2xl font-semibold">My account</h1>
@@ -30,6 +78,7 @@ export default function Page() {
           <label htmlFor="name" className="flex flex-col gap-2">
             <h3 className="text-sm font-medium">Name</h3>
             <input
+              value={profile?.name}
               type="text"
               id="name"
               className="w-full border border-border focus:outline-black rounded-lg p-3"
@@ -40,6 +89,7 @@ export default function Page() {
             <textarea
               name="about"
               id="about"
+              value={profile?.about}
               cols={30}
               rows={10}
               className="w-full h-[131px] border border-border focus:outline-black rounded-lg p-3 text-primary"
@@ -50,6 +100,7 @@ export default function Page() {
             <h3 className="text-sm font-medium">Social media URL</h3>
             <input
               type="email"
+              value={profile?.socialMediaURL}
               id="socialUrl"
               className="w-full border border-border focus:outline-black rounded-lg p-3"
             />
@@ -126,6 +177,7 @@ export default function Page() {
             <label htmlFor="firstname" className="flex flex-col gap-2">
               <h3 className="text-sm font-medium">First name</h3>
               <input
+                value={bankCard?.firstName}
                 type="text"
                 id="firstname"
                 placeholder="First name"
@@ -135,6 +187,7 @@ export default function Page() {
             <label htmlFor="lastname" className="flex flex-col gap-2">
               <h3 className="text-sm font-medium">Last name</h3>
               <input
+                value={bankCard?.lastName}
                 type="text"
                 id="lastname"
                 placeholder="Last name"
@@ -146,6 +199,7 @@ export default function Page() {
             <h3 className="text-sm font-medium">Enter card number</h3>
             <input
               type="number"
+              value={bankCard?.cardNumber}
               id="cardNumber"
               placeholder="XXXX-XXXX-XXXX-XXXX"
               className="border border-border  focus:outline-black rounded-lg p-3"
@@ -157,7 +211,7 @@ export default function Page() {
               <h3 className="text-sm font-medium">Expires</h3>
               <Select>
                 <SelectTrigger className="">
-                  <SelectValue placeholder="Month" />
+                  <SelectValue placeholder={bankCard?.expiryDate} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>

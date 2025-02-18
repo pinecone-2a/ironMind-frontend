@@ -88,7 +88,7 @@ const [copied, setCopied] = useState(false)
         const data = await res.json();
 
         console.log(data);
-        setUser(data.user);
+        setUser(data.user.userId.id);
 
         router.push("/");
       } catch (error) {
