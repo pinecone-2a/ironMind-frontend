@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export default function onGet(path: string) {
   const [data, setData] = useState([]);
   async function getFetchData() {
+
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${path}`)
       .then((res) => res.json())
       .then((data) => setData(data));
@@ -13,6 +14,7 @@ export default function onGet(path: string) {
   }, []);
   return { data };
 }
+
 
 export const onPost = async (postPath: string, body: any) => {
   try {
@@ -27,11 +29,11 @@ export const onPost = async (postPath: string, body: any) => {
         body: JSON.stringify(body),
       }
     );
-
     if (!response.ok) {
       throw new Error(`${response.status}`);
     }
     const data = await response.json();
+
     return data;
   } catch (error) {
     return error;
@@ -57,3 +59,4 @@ export const onPut = async (postPath: string, body: any) => {
     return { success: false }; // Алдааны бүтэцтэй хариу буцаах
   }
 };
+
