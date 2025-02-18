@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import cookies from "js-cookie";
+
 import { useCookies } from 'next-client-cookies';
 import { onPost } from "../_Components/hooks/useFetch";
+
 
 import {
   DropdownMenu,
@@ -32,8 +34,8 @@ type Transaction = {
   message?: string;
   amount: number;
   timeAgo: string;
-
 }
+
 
 export default function Dashboard() {
   // const cookies = useCookies()
@@ -54,17 +56,25 @@ export default function Dashboard() {
       try {
         console.log(document.cookie, cookies.get());
 
-        const res = await fetch("http://localhost:5000/user/profile", {
-          method: "POST",
-          credentials: "include",
-          headers: { Cookie: cookies.get("") || ""},
-        });
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: { Cookie: cookies.get().toString() },
+          }
+        );
+
 
     
 
         const data = await res.json();
-        setUser(data.user.userId.id);
-        console.log("User Profile:", data);
+
+        console.log(data);
+        setUser(data.user);
+
+        router.push("/");
       } catch (error) {
         console.error("Authentication error:", error);
         router.push("/log-in");
@@ -73,6 +83,7 @@ export default function Dashboard() {
 
     fetchUser();
   }, []);
+
 
   useEffect(() => {
     if (!user) return;
@@ -104,7 +115,6 @@ export default function Dashboard() {
   const filteredDonations = filterAmount
     ? donation.filter((t: { amount: number; }) => t.amount === filterAmount)
     : donation;
-
 
   if (!user) {
     return <p>Loading...</p>;
@@ -163,7 +173,9 @@ export default function Dashboard() {
                   <DropdownMenuItem key={amount}>
                     <Checkbox
                       checked={filterAmount === amount}
-                      onCheckedChange={() => setFilterAmount(filterAmount === amount ? null : amount)}
+                      onCheckedChange={() =>
+                        setFilterAmount(filterAmount === amount ? null : amount)
+                      }
                     />
                     <span className="ml -2">${amount}</span>
                   </DropdownMenuItem>
@@ -172,6 +184,7 @@ export default function Dashboard() {
             </DropdownMenu>
           </div>
           <div className="mt-4 space-y-4">
+
             {filteredDonations.map((transaction: any, index: any) => (
               <Card key={index} className="p-4 rounded-lg flex justify-between items-start">
                 <div>
@@ -179,9 +192,12 @@ export default function Dashboard() {
                   <p className="text-gray-400 text-sm">{transaction.profileUrl}</p>
                   {transaction.specialMessage && <p className="text-gray-300 mt-1 text-sm">{transaction.specialMessage}</p>}
                   <p className="text-gray-400 text-xs mt-1">{transaction.createdAt}</p>
+
                 </div>
-                <p className="font-semibold text-green-400">+ ${transaction.amount}</p>
-                </Card>
+                <p className="font-semibold text-green-400">
+                  + ${transaction.amount}
+                </p>
+              </Card>
             ))}
           </div>
         </Card>
