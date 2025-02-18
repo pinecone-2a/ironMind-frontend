@@ -3,15 +3,20 @@
 
 import { Button } from "@/components/ui/button";
 import * as React from "react";
-import { Navigation } from "../(web)/_Components/Navigation";
-import ProfileSection from "./_components/profileSection";
-import DonationSection from "./_components/donationSection";
+import { Navigation } from "../../(web)/_Components/Navigation";
+import ProfileScreen from "./_components/profileSection";
+import DonationScreen from "./_components/donationSection";
 import { useState, useRef } from "react";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 
 export default function Page() {
+  const router = useRouter()
+  const {id} =  useParams();
+  console.log(id)
   const [image, setImage] = useState<string|null>(null);
-  const fileInput = useRef<HTMLInputElement| null>(null); 
-  
+   
   const handleImageChange= (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -36,7 +41,7 @@ export default function Page() {
               type="file"
             />
             <Button>Add a cover image</Button>
-          </>
+          </>   
         ):(
           <img
             src={image}
@@ -46,8 +51,8 @@ export default function Page() {
       </div>
 
       <div className="w-full flex gap-8 justify-center absolute mt-[-3%]">
-        <ProfileSection />
-        <DonationSection />
+        <ProfileScreen />
+        <DonationScreen />
       </div>
     </>
   );
