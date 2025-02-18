@@ -1,11 +1,19 @@
-"use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
+
+
+"use client"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { onPost } from "../_Components/hooks/useFetch"
+
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
+
+import { Button } from "@/components/ui/button"
+import { Form,
+
   FormControl,
   FormField,
   FormItem,
@@ -14,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { onPost } from "../_Components/hooks/useFetch"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -24,15 +33,30 @@ const formSchema = z.object({
   }),
 });
 
+
 export default function EmailPasswordLogin() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "", password: "" },
   });
 
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Form Data", data);
-  };
+
+const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+
+  
+  onPost("user/auth/sign-in", data); 
+  setTimeout(() => {
+    router.push("/")
+  }, 3000)
+
+
+const handleSubmit = (data: z.infer<typeof formSchema>) => {
+  onPost("user/auth/sign-in", data);
+
+  console.log("Form Data", data); 
+};
+
 
   return (
     <div className="flex justify-center">
@@ -77,6 +101,8 @@ export default function EmailPasswordLogin() {
                     </FormItem>
                   )}
                 />
+                <Link href="forgot-password">     <div className="text-center">Reset Password</div> </Link>
+      
                 <Button className="w-[100%]">Continue</Button>
               </form>
             </Form>
