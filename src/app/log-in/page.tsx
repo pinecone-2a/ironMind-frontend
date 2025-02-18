@@ -1,84 +1,93 @@
-"use client"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
-import { Form,
+import { Button } from "@/components/ui/button";
+import {
+  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage, } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email({
-    message: "Please enter a valid email"
+    message: "Please enter a valid email",
   }),
-  password: z.string().min(6,{
-    message: "Password must be 6 or more characters long" 
-  })
-})
+  password: z.string().min(6, {
+    message: "Password must be 6 or more characters long",
+  }),
+});
 
-export default function EmailPasswordLogin({onClick}: {onClick: () => void;}) {
+export default function EmailPasswordLogin() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {email: "",password: ""},
-  })
+    defaultValues: { email: "", password: "" },
+  });
 
-const handleSubmit = (data: z.infer<typeof formSchema>) => {
-  console.log("Form Data", data); 
-};
+  const handleSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log("Form Data", data);
+  };
 
-return (
-  <div className="flex justify-center">
-    <div className="w-[50%] h-screen bg-[#FBBF24] flex items-center justify-center">
-      <img src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png" className="h-screen"/>
-    </div>
-    <div className="h-screen w-[50%] justify-center items-center">
-      <div className="h-screen w-[80%] flex justify-center items-center relative">
-        <div className="flex flex-col items-start">
-          <p className="font-semibold text-[24px] mb-2">Welcome back</p>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 w-[140%]">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter email here" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter password here" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+  return (
+    <div className="flex justify-center">
+      <div className="w-[50%] h-screen bg-[#FBBF24] flex items-center justify-center">
+        <img
+          src="https://res.cloudinary.com/dht5mewgk/image/upload/v1738738837/kogl1awioe0xhgmtnj6y.png"
+          className="h-screen"
+        />
+      </div>
+      <div className="h-screen w-[50%] justify-center items-center">
+        <div className="h-screen w-[80%] flex justify-center items-center relative">
+          <div className="flex flex-col items-start">
+            <p className="font-semibold text-[24px] mb-2">Welcome back</p>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-8 w-[140%]"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter email here" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter password here" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button className="w-[100%]">Continue</Button>
-            </form>
-          </Form>
+              </form>
+            </Form>
+          </div>
+          <Link href="/sign-up">
+            <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">
+              Sign up
+            </button>
+          </Link>
         </div>
-        <Link href="/sign-up">
-          <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">Sign up</button>
-        </Link>
       </div>
     </div>
-  </div>
-);
-
+  );
 }

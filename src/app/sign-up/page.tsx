@@ -30,7 +30,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function UsernameSignup({ onClick }: { onClick: () => void }) {
+export default function UsernameSignup() {
   const [step, setStep] = useState(1);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,10 +91,7 @@ export default function UsernameSignup({ onClick }: { onClick: () => void }) {
             </div>
           )}
           {step === 2 && (
-            <EmailPasswordSignup
-              username={form.getValues("username")}
-              onClick={onClick}
-            />
+            <EmailPasswordSignup username={form.getValues("username")} />
           )}
           <Link href="/log-in">
             <button className="bg-[#F4F4F5] px-5 py-3 rounded-md text-[14px] absolute top-10 right-0">
@@ -107,13 +104,7 @@ export default function UsernameSignup({ onClick }: { onClick: () => void }) {
   );
 }
 
-function EmailPasswordSignup({
-  username,
-  onClick,
-}: {
-  username: string;
-  onClick: () => void;
-}) {
+function EmailPasswordSignup({ username }: { username: string }) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({

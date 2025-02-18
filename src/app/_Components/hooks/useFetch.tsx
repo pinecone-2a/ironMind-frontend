@@ -31,13 +31,14 @@ export const onPost = async (postPath: string, body: any) => {
     const data = await response.json();
     return data; 
   } catch (error) {
+    console.log(error)
   }
 };
 
 
 export const onPut = async (postPath: string, body: any) => {
   try {
-    const response = await fetch(`http://localhost:4500/${postPath}`, {
+    const response = await fetch(`http://localhost4500/${postPath}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
