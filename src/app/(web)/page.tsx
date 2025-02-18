@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import cookies from "js-cookie";
+
 import { useCookies } from "next-client-cookies";
 import { onPost } from "../_Components/hooks/useFetch";
-
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -18,12 +18,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronDown, Copy, User } from "lucide-react";
 
+
 type User = {
   username: string;
   email: string;
   id: string;
   user: string;
 };
+
 
 type Transaction = {
   name: string;
@@ -33,43 +35,46 @@ type Transaction = {
   createdat: string;
 };
 
+
+
 export default function Dashboard() {
   // const cookies = useCookies()
   const [user, setUser] = useState<any>();
-  const [donation, setDonation] = useState<any>([]);
-  const [copied, setCopied] = useState(false);
-  const [totalEarning, setTotalEarning] = useState<number>();
+  const [donation, setDonation] = useState<any>([])
+
+  const [totalEarning, setTotalEarning] = useState<number>()
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
   const router = useRouter();
 
-  const transactions: Transaction[] = [];
-  function ShareLink(setCopied: any) {
-    const pageUrl = "https://www.instagram.com/";
-    navigator.clipboard
-      .writeText(pageUrl)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1000);
-      })
-      .catch((err) => {
-        alert("FAILED");
-        console.error("Error", err);
-      });
-  }
+  const transactions: Transaction[] = [
+
+  ];
+
+
   useEffect(() => {
     async function fetchUser() {
       try {
         console.log(document.cookie, cookies.get());
 
-        const res = await fetch("http://localhost:5000/user/profile", {
-          method: "POST",
-          credentials: "include",
-          headers: { Cookie: cookies.get("") || "" },
-        });
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: { Cookie: cookies.get().toString() },
+          }
+        );
+
+
+    
 
         const data = await res.json();
-        setUser(data.user.userId.id);
-        console.log("User Profile:", data);
+
+        console.log(data);
+        setUser(data.user);
+
+        router.push("/");
       } catch (error) {
         console.error("Authentication error:", error);
         router.push("/log-in");
@@ -79,36 +84,36 @@ export default function Dashboard() {
     fetchUser();
   }, []);
 
+
   useEffect(() => {
     if (!user) return;
-
+  
     async function fetchUserData() {
       try {
-        const response = await fetch(
-          `http://localhost:5000/donation/received/${user}`
-        );
-        const totalEarning = await fetch(
-          `http://localhost:5000/donation/total-earnings/${user}`
-        );
+        const response = await fetch(`http://localhost:5000/donation/received/${user}`);
+        const totalEarning = await fetch(`http://localhost:5000/donation/total-earnings/${user}`);
+        
 
-        const totalEarningResult = await totalEarning.json();
+        const totalEarningResult = await totalEarning.json()
         const result = await response.json();
         transactions.push(result);
-        console.log(totalEarning);
-        setTotalEarning(totalEarningResult.earnings);
+        console.log(totalEarning)
+        setTotalEarning(totalEarningResult.earnings)
         setDonation(result);
-        console.log(totalEarningResult);
+        console.log(totalEarningResult)
         console.log("Received donations:", transactions[0]);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
 
+
     fetchUserData();
   }, [user]);
 
   const filteredDonations = filterAmount
     ? donation.filter((t: { amount: number }) => t.amount === filterAmount)
+
     : donation;
 
   if (!user) {
@@ -118,7 +123,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-white p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-black text-[20px]">{user}</h1>
+
+      <h1 className="text-black text-[20px]">{user}</h1>
         <Card className="p-6 rounded-lg shadow-lg">
           <div className="mt-4 flex justify-between items-center">
             <div>
@@ -138,6 +144,7 @@ export default function Dashboard() {
             {copied && (
               <p className="text-green-500 mt-2 text-sm text-center">✅ Link copied!</p>
             )}</div>
+
           </div>
           <div className="mt-4 flex justify-between items-center">
             <h3 className="text-lg font-semibold">Earnings</h3>
@@ -163,6 +170,7 @@ export default function Dashboard() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex gap-4 bg-white text-black hover:bg-white border border-dashed">
+
                   Amount
                   <ChevronDown />
                 </Button>
@@ -183,6 +191,7 @@ export default function Dashboard() {
             </DropdownMenu>
           </div>
           <div className="mt-4 space-y-4">
+
             {filteredDonations?.length > 0 &&
               filteredDonations.map((transaction: any, index: any) => (
                 <Card
@@ -210,6 +219,7 @@ export default function Dashboard() {
                   </p>
                 </Card>
               ))}
+
           </div>
         </Card>
       </div>

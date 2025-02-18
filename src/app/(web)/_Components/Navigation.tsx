@@ -1,3 +1,5 @@
+"use client"
+
 import { Coffee } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import {
@@ -10,7 +12,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
 import { Settings } from "lucide-react";
 import { HelpCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 export const Navigation = () => {
+  const router = useRouter()
+ 
+
+ async function logout() {  
+  router.push("log-in") 
+  try {
+    await fetch("http://localhost:5000/user/logout/", {
+      method: "POST",
+      credentials: "include"
+    })
+   
+  }
+  catch(error) {
+    console.log(error)
+
+  }
+}
+
   return (
     <div className="flex justify-between h-full px-24 py-8">
       <div className="flex gap-2 text-black text-xl font-extrabold ">
@@ -35,7 +56,7 @@ export const Navigation = () => {
                 <DropdownMenuItem className="flex justify-between">
                   Help <HelpCircle />
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex justify-between">
+                <DropdownMenuItem onClick={logout} className="flex justify-between">
                   Log out <LogOut />
                 </DropdownMenuItem>
               </DropdownMenuContent>
