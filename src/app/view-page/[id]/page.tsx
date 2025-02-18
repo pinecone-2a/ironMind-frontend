@@ -3,13 +3,18 @@
 
 import { Button } from "@/components/ui/button";
 import * as React from "react";
-import { Navigation } from "../(web)/_Components/Navigation";
+import { Navigation } from "../../(web)/_Components/Navigation";
 import ProfileScreen from "./_components/profileSection";
 import DonationScreen from "./_components/donationSection";
 import { useState, useRef } from "react";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 export default function Page() {
+  const router = useRouter()
+  const {id} =  useParams();
+  console.log(id)
   const [image, setImage] = useState<string|null>(null);
    
   const handleImageChange= (e: React.ChangeEvent<HTMLInputElement>) => {

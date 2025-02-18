@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import cookies from "js-cookie";
-import { useCookies } from "next-client-cookies";
+
+import { useCookies } from 'next-client-cookies';
+import { onPost } from "../_Components/hooks/useFetch";
+
 
 import {
   DropdownMenu,
@@ -15,14 +18,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronDown, Copy } from "lucide-react";
+import { ChevronDown, Copy, User } from "lucide-react";
 
-interface User {
+
+type User = {
   username: string;
   email: string;
+  id: string
+  user: string
 }
 
-interface Transaction {
+type Transaction = {
   name: string;
   profileUrl: string;
   message?: string;
@@ -30,40 +36,26 @@ interface Transaction {
   timeAgo: string;
 }
 
-const transactions: Transaction[] = [
-  {
-    name: "Azaa",
-    profileUrl: "buymeacoffee.com/kissyface",
-    amount: 2,
-    timeAgo: "10 mins ago",
-  },
-  {
-    name: "baagii",
-    profileUrl: "instagram.com/weleisley",
-    message: "Thank you!",
-    amount: 1,
-    timeAgo: "5 hours ago",
-  },
-  {
-    name: "amaraa",
-    profileUrl: "buymeacoffee.com/bdsadas",
-    message: "Thank you!",
-    amount: 10,
-    timeAgo: "10 hours ago",
-  },
-];
 
 export default function Dashboard() {
   // const cookies = useCookies()
-  const [user, setUser] = useState<User | null>(null);
-  const [earnings, setEarnings] = useState(450);
+  const [user, setUser] = useState<any>();
+  const [donation, setDonation] = useState<any>([])
+
+  const [totalEarning, setTotalEarning] = useState<number>()
   const [filterAmount, setFilterAmount] = useState<number | null>(null);
   const router = useRouter();
+
+  const transactions: Transaction[] = [
+
+  ];
+
 
   useEffect(() => {
     async function fetchUser() {
       try {
         console.log(document.cookie, cookies.get());
+
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
@@ -74,26 +66,55 @@ export default function Dashboard() {
           }
         );
 
-        if (!res.ok) {
-          throw new Error("Unauthorized");
-        }
+
+    
 
         const data = await res.json();
+
         console.log(data);
         setUser(data.user);
 
         router.push("/");
       } catch (error) {
-        router.push("/log-in"); // Redirect to login if unauthorized
+        console.error("Authentication error:", error);
+        router.push("/log-in");
       }
     }
 
     fetchUser();
   }, []);
 
-  const filteredTransactions = filterAmount
-    ? transactions.filter((t) => t.amount === filterAmount)
-    : transactions;
+
+  useEffect(() => {
+    if (!user) return;
+  
+    async function fetchUserData() {
+      try {
+        const response = await fetch(`http://localhost:5000/donation/received/${user}`);
+        const totalEarning = await fetch(`http://localhost:5000/donation/total-earnings/${user}`);
+        
+
+        const totalEarningResult = await totalEarning.json()
+        const result = await response.json();
+        transactions.push(result);
+        console.log(totalEarning)
+        setTotalEarning(totalEarningResult.earnings)
+        setDonation(result);
+        console.log(totalEarningResult)
+        console.log("Received donations:", transactions[0]);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+  
+    fetchUserData();
+  }, [user]);
+
+ 
+  
+  const filteredDonations = filterAmount
+    ? donation.filter((t: { amount: number; }) => t.amount === filterAmount)
+    : donation;
 
   if (!user) {
     return <p>Loading...</p>;
@@ -102,11 +123,12 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-white p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-black text-[20px]">{user.email}</h1>
+      <h1 className="text-black text-[20px]">{user}</h1>
         <Card className="p-6 rounded-lg shadow-lg">
           <div className="mt-4 flex justify-between items-center">
             <div>
               <Avatar>
+                <h1 className="text-black text-[20px]">{user.id}</h1>
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback></AvatarFallback>
               </Avatar>
@@ -134,7 +156,7 @@ export default function Dashboard() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <p className="text-4xl font-bold mt-2">${earnings}</p>
+          <p className="text-4xl font-bold mt-2">${totalEarning}</p>
         </Card>
         <Card className="p-6 mt-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
@@ -155,31 +177,22 @@ export default function Dashboard() {
                         setFilterAmount(filterAmount === amount ? null : amount)
                       }
                     />
-                    <span className="ml-2">${amount}</span>
+                    <span className="ml -2">${amount}</span>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <div className="mt-4 space-y-4">
-            {filteredTransactions.map((transaction, index) => (
-              <Card
-                key={index}
-                className="p-4 rounded-lg flex justify-between items-start"
-              >
+
+            {filteredDonations.map((transaction: any, index: any) => (
+              <Card key={index} className="p-4 rounded-lg flex justify-between items-start">
                 <div>
                   <p className="font-semibold text-black">{transaction.name}</p>
-                  <p className="text-gray-400 text-sm">
-                    {transaction.profileUrl}
-                  </p>
-                  {transaction.message && (
-                    <p className="text-gray-300 mt-1 text-sm">
-                      {transaction.message}
-                    </p>
-                  )}
-                  <p className="text-gray-400 text-xs mt-1">
-                    {transaction.timeAgo}
-                  </p>
+                  <p className="text-gray-400 text-sm">{transaction.profileUrl}</p>
+                  {transaction.specialMessage && <p className="text-gray-300 mt-1 text-sm">{transaction.specialMessage}</p>}
+                  <p className="text-gray-400 text-xs mt-1">{transaction.createdAt}</p>
+
                 </div>
                 <p className="font-semibold text-green-400">
                   + ${transaction.amount}
