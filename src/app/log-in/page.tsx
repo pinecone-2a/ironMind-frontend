@@ -46,13 +46,9 @@ const handleSubmit = async (data: z.infer<typeof formSchema>) => {
   setTimeout(() => {
     router.push("/")
   }, 3000)
+}
 
 
-const handleSubmit = (data: z.infer<typeof formSchema>) => {
-  onPost("user/auth/sign-in", data);
-
-  console.log("Form Data", data); 
-};
 
 
   return (
@@ -113,5 +109,4 @@ const handleSubmit = (data: z.infer<typeof formSchema>) => {
       </div>
     </div>
   );
-}
 }
