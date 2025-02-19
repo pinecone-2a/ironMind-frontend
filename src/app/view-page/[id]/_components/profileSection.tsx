@@ -135,14 +135,14 @@ export function DialogDemo({ profile, onUpdate }: DialogDemoProps) {
 
   const handleSubmit = async () => {
     const updatedProfile = {
-      name:"hei",
-      about:"ebid",
-      socialMediaURL:"ifehif",
-      avatarImage:"wdadadwdad"
+      name,
+      about,
+      socialMediaURL,
+      avatarImage:"dbuwb"
     };
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/individual/${profile.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/editProfile/${profile.id}`, {
         method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
@@ -156,6 +156,7 @@ export function DialogDemo({ profile, onUpdate }: DialogDemoProps) {
       console.error('Error updating profile:', error);
     }
   };
+  console.log(profile.id)
 
   return (
     <Dialog>
