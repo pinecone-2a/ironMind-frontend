@@ -10,37 +10,55 @@ export type Donation = {
   specialMessage: string;
   socialURLOrBuyMeACoffee: string;
   donorId: string;
-  recipentId: string;
+  recipientId: string;
 };
 
 export default function DonationScreen() {
+  const [recipientId, setRecipientId] = useState<any>("")
   const [donorId, setDonorId] = useState<any>("")
-  const params = useParams();
-  const recipentId = params.id as string; 
+  const { id } = useParams();
 
 
 
   const [donation, setDonation] = useState<Donation>({
-    amount: 2,
-    specialMessage: "",
-    socialURLOrBuyMeACoffee: "",
-    donorId: donorId,
-    recipentId: "ONxm4AVVmrfZa5Xptw130",
+    amount: 0,
+    specialMessage: "AzaagaaS",
+    socialURLOrBuyMeACoffee: "https://www.buymeacoffee.com/example",
+    donorId: "",
+    recipientId: ""
   });
 
 
+
+
   useEffect(() => {
-    console.log(recipentId)
-    if (recipentId) {
-        setDonation((prev) => ({ ...prev, recipentId }));
+    const fetchProfile = async () => {
+        if (id) {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${id}`);
+                const data = await res.json();
+                console.log(data)
+                setRecipientId(data.userId);
+            } catch (error) {
+                console.error('Failed to fetch profile:', error);
+            }
+        }
     }
-  }, [recipentId]);
+    fetchProfile();
+}, [id]);
 
   useEffect(() => {
     if (donorId) {
       setDonation((prev) => ({ ...prev, donorId }));
     }
   }, [donorId]);
+
+  useEffect(() => {
+    if (recipientId) {
+      setDonation((prev) => ({ ...prev, recipientId }));
+    }
+  }, [recipientId]);
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -101,6 +119,10 @@ export default function DonationScreen() {
   };
 
   const handleDonation = () => {
+    if (!donation.donorId) {
+      console.error("Donor ID is missing!");
+      return;
+    }
     sendDonation("donation/create-donation", donation);
   };
 

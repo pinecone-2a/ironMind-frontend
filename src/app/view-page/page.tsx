@@ -1,15 +1,17 @@
 
 'use client'
-
+import { useContext } from "react";
+import { UserProvider } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import * as React from "react";
-import { Navigation } from "../../(web)/_Components/Navigation";
+import { Navigation } from "../(web)/_Components/Navigation";
 import ProfileScreen from "./_components/profileSection";
 import DonationScreen from "./_components/donationSection";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Profile } from "./_components/profileSection";
+import { useUser } from "@/context/AuthContext";
 
 
 export default function Page() {
@@ -29,6 +31,10 @@ export default function Page() {
       setImage(null); 
     }
   };
+  // const auth = useContext();
+
+  const {userId} = useUser() || {};
+  console.log(userId)
 
     useEffect(() => {
       const fetchProfile = async () => {
@@ -46,10 +52,15 @@ export default function Page() {
   
       fetchProfile();
     }, [id]);
+
+
     
     if (!profile) {
       return <div>Loading...</div>;
     }
+
+
+
   return (
     <>
       <Navigation />

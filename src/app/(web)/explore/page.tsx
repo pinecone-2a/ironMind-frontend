@@ -1,5 +1,7 @@
 
 'use client'
+import { useContext } from "react";
+import { UserProvider } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -13,6 +15,7 @@ interface Profile {
 
 export default function Home() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
+
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -32,6 +35,7 @@ export default function Home() {
     <>
       <div className="w-[957px] h-[880px] p-5 ml-auto mr-auto mb-5">
         <h1 className="font-semibold text-[20px] mb-5">Explore creators</h1>
+
         <input
           className="h-[36px] w-[243px] border rounded-md mb-5 text-[14px] px-4"
           placeholder="Search name"
