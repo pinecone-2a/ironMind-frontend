@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Coffee } from "lucide-react";
 import { ChevronDown } from "lucide-react";
@@ -20,10 +20,10 @@ import Link from "next/link";
 
 export const Navigation = () => {
   const router = useRouter();
-  const [profileName, setProfileName] = useState("")
+  const [profileName, setProfileName] = useState("");
   const [profile, setProfile] = useState("");
 
-  const {userId} = useUserId()
+  const { userId } = useUserId();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -34,7 +34,7 @@ export const Navigation = () => {
           );
           const data = await res.json();
           setProfile(data.avatarImage);
-          setProfileName(data.name)
+          setProfileName(data.name);
         } catch (error) {
           console.error("Failed to fetch profile:", error);
         }
@@ -42,6 +42,7 @@ export const Navigation = () => {
     };
     fetchProfile();
   }, [userId]);
+  console.log(profile);
 
   async function logout() {
     try {
@@ -81,7 +82,10 @@ export const Navigation = () => {
                 <DropdownMenuItem className="flex justify-between">
                   Help <HelpCircle />
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={logout} className="flex justify-between">
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="flex justify-between"
+                >
                   Log out <LogOut />
                 </DropdownMenuItem>
               </DropdownMenuContent>
