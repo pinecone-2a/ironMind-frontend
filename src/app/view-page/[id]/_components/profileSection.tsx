@@ -132,14 +132,15 @@ import { AvatarImage } from '@radix-ui/react-avatar';
 export function DialogDemo({ profile, onUpdate }: DialogDemoProps) {
   const [name, setName] = useState(profile.name);
   const [about, setAbout] = useState(profile.about);
+  const [avatarImage, setAvatarImage] = useState(profile.avatarImage)
   const [socialMediaURL, setSocialMediaURL] = useState(profile.socialMediaURL);
 
   const handleSubmit = async () => {
     const updatedProfile = {
       name,
       about,
+      avatarImage,
       socialMediaURL,
-      avatarImage:"dbuwb"
     };
 
     try {
@@ -225,70 +226,3 @@ export function DialogDemo({ profile, onUpdate }: DialogDemoProps) {
     </Dialog>
   );
 }
-
-// export function DialogDemo({ profile }: DialogDemoProps) {
-//   return (
-//     <Dialog>
-//       <DialogTrigger asChild>
-//         <Button variant="outline">Edit Profile</Button>
-//       </DialogTrigger>
-//       <DialogContent className="sm:max-w-[559px]">
-//         <DialogHeader>
-//           <DialogTitle>Edit profile</DialogTitle>
-//           <DialogDescription>
-//             Make changes to your profile here. Click save when you're done.
-//           </DialogDescription>
-//         </DialogHeader>
-//         <div className="grid gap-4 py-4">
-//         <div>
-//             <Label htmlFor="pfp">
-//               Add photo
-//             </Label>
-//             <div className="rounded-full w-[160px] h-[160px] bg-[#F4F4F5] relative">
-//              <img
-//               src={profile.avatarImage}
-//               alt={profile.name}
-//               className="rounded-full w-full h-full object-cover"
-//              />
-//              <IoCameraOutline className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white w-[28px] h-[28px]" />
-//            </div>
-//           </div>
-//           <div>
-//             <Label htmlFor="name">
-//               Name
-//             </Label>
-//             <Input
-//               id="name"
-//               defaultValue={profile.name}
-//               className="col-span-3"
-//             />
-//           </div>
-//           <div>
-//             <Label htmlFor="about">
-//               About
-//             </Label>
-//             <Input
-//               id="about"
-//               defaultValue={profile.about}
-//               className="col-span-3"
-//             />
-//           </div>
-//           <div>
-//             <Label htmlFor="url">
-//               Socila media URL
-//             </Label>
-//             <Input
-//               id="url"
-//               defaultValue={profile.socialMediaURL}
-//               className="col-span-3"
-//             />
-//           </div>
-//         </div>
-//         <DialogFooter>
-//           <Button type="submit" className='bg-[#F4F4F5] text-black hover:text-white'>Cancel</Button>
-//           <Button type="submit">Save changes</Button>
-//         </DialogFooter>
-//       </DialogContent>
-//     </Dialog>
-//   )
-// }
