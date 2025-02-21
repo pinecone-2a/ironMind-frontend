@@ -21,16 +21,36 @@ type ProfileStepProps = {
 export const CreateProfileStep1: React.FC<ProfileStepProps> = ({ userInfo, error, onChange, handleNext }) => {
 
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "Food_delivery");
   
- 
-      onChange({
-        target: { id: "avatarImage", value: URL.createObjectURL(file) },
-      } as ChangeEvent<HTMLInputElement>);
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/df88yvhqr/upload`,
+          { method: "POST", body: data }
+        );
+  
+        if (!response.ok) throw new Error("Image upload failed");
+  
+        const dataJson = await response.json();
+       
+        console.log(dataJson.secure_url);
+  
+        onChange({
+          target: { id: "avatarImage", value: dataJson.secure_url },
+        } as ChangeEvent<HTMLInputElement>);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
     }
   };
+  
+  
   
   
   
