@@ -16,7 +16,7 @@ export default function Page() {
   const [userId, setUserId] = useState<any>();
   const [profile, setProfile] = useState<any>();
   const [bankCard, setBankCard] = useState<any>();
-  console.log(bankCard)
+  console.log(profile);
 
   useEffect(() => {
     async function fetchUser() {
@@ -46,7 +46,7 @@ export default function Page() {
     async function fetchProfile() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${userId}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/getProfile/${userId}`
         );
         const data = await res.json();
         setProfile(data?.profile);
@@ -58,6 +58,25 @@ export default function Page() {
 
     fetchProfile();
   }, [userId]);
+
+  const editProfile = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/updateProfile/${userId}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(profile),
+    });
+  };
+
+  const onChange = (e: any) => {
+    console.log("--", e.target.name, e.target.value);
+    setProfile({
+      ...profile,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <div className="max-w-[672px] w-[650px] flex flex-col gap-8  ">
@@ -79,8 +98,10 @@ export default function Page() {
             <h3 className="text-sm font-medium">Name</h3>
             <input
               value={profile?.name}
+              onChange={onChange}
               type="text"
               id="name"
+              name="name"
               className="w-full border border-border focus:outline-black rounded-lg p-3"
             />
           </label>
@@ -90,6 +111,7 @@ export default function Page() {
               name="about"
               id="about"
               value={profile?.about}
+              onChange={onChange}
               cols={30}
               rows={10}
               className="w-full h-[131px] border border-border focus:outline-black rounded-lg p-3 text-primary"
@@ -99,14 +121,16 @@ export default function Page() {
           <label htmlFor="socialUrl" className="flex flex-col gap-2">
             <h3 className="text-sm font-medium">Social media URL</h3>
             <input
+            onChange={onChange}
               type="email"
               value={profile?.socialMediaURL}
               id="socialUrl"
+              name="socialMediaURL"
               className="w-full border border-border focus:outline-black rounded-lg p-3"
             />
           </label>
         </form>
-        <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium">
+      <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium" onClick={()=>{editProfile()}}>
           Save changes
         </button>
       </div>
@@ -178,6 +202,7 @@ export default function Page() {
               <h3 className="text-sm font-medium">First name</h3>
               <input
                 value={bankCard?.firstName}
+                onChange={onChange}
                 type="text"
                 id="firstname"
                 placeholder="First name"
@@ -188,6 +213,7 @@ export default function Page() {
               <h3 className="text-sm font-medium">Last name</h3>
               <input
                 value={bankCard?.lastName}
+                onChange={onChange}
                 type="text"
                 id="lastname"
                 placeholder="Last name"
@@ -200,6 +226,7 @@ export default function Page() {
             <input
               type="number"
               value={bankCard?.cardNumber}
+              onChange={onChange}
               id="cardNumber"
               placeholder="XXXX-XXXX-XXXX-XXXX"
               className="border border-border  focus:outline-black rounded-lg p-3"
