@@ -14,9 +14,16 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const [userId, setUserId] = useState<any>();
-  const [profile, setProfile] = useState<any>();
+  const [profile, setProfile] = useState({
+    name: "",
+    about: "",
+    avatarImage: "",
+    socialMediaURL:"",
+    backgroundImage:"",
+    successMessage:""
+  });
   const [bankCard, setBankCard] = useState<any>();
-  console.log(profile);
+  console.log(profile?.avatarImage)
 
   useEffect(() => {
     async function fetchUser() {
@@ -60,22 +67,67 @@ export default function Page() {
   }, [userId]);
 
   const editProfile = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/updateProfile/${userId}`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify(profile),
-    });
+    await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/updateProfile/${userId}`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(profile),
+      }
+    );
+    alert("Edit is successfully")
   };
 
   const onChange = (e: any) => {
+    console.log(e.target.value);
     console.log("--", e.target.name, e.target.value);
     setProfile({
       ...profile,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const editBankCard = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/bankcard/${userId}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(bankCard),
+    });
+  };
+
+  const onChangeBankcard = (e: any) => {
+    console.log("--", e.target.name, e.target.value);
+    setProfile({
+      ...bankCard,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", "Food_delivery");
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/df88yvhqr/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      const dataJson = await response.json();
+      setProfile((prev: any) => ({ ...prev, image: dataJson.secure_url }));
+    }
   };
 
   return (
@@ -88,10 +140,15 @@ export default function Page() {
         <h2 className="text-base font-bold">Personal info</h2>
         <label htmlFor="progileImg" className="flex flex-col gap-3">
           <h3 className="text-sm font-medium">Add photo</h3>
-          <div className="w-[160px] h-[160px] bg-accent rounded-full flex items-center justify-center">
+          <div
+            className="w-[160px] h-[160px] bg-cover bg-center  rounded-full flex items-center justify-center"
+            style={{
+              backgroundImage: `url(${profile?.avatarImage})`
+            }}
+          >
             <Camera size={23} color="gray" />
           </div>
-          <input id="progileImg" type="file" className="hidden" />
+          <input id="progileImg" type="file" className="hidden" onChange={handleUpload} />
         </label>
         <form action="" className="flex flex-col gap-3">
           <label htmlFor="name" className="flex flex-col gap-2">
@@ -121,7 +178,7 @@ export default function Page() {
           <label htmlFor="socialUrl" className="flex flex-col gap-2">
             <h3 className="text-sm font-medium">Social media URL</h3>
             <input
-            onChange={onChange}
+              onChange={onChange}
               type="email"
               value={profile?.socialMediaURL}
               id="socialUrl"
@@ -130,9 +187,15 @@ export default function Page() {
             />
           </label>
         </form>
-      <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium" onClick={()=>{editProfile()}}>
+        <button
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium"
+          onClick={() => {
+            editProfile();
+          }}
+        >
           Save changes
         </button>
+        
       </div>
       <div
         className="bg-background rounded-lg p-6 flex flex-col gap-6 border border-border
@@ -179,12 +242,12 @@ export default function Page() {
         <form action="" className="flex flex-col gap-3">
           <label className="flex flex-col gap-2 whitespace-nowrap">
             <h3 className="text-sm font-medium">Select country</h3>
-            <Select>
+            <Select name="country">
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select country" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
+                <SelectGroup onChange={onChangeBankcard}>
                   <SelectLabel>Country</SelectLabel>
                   <SelectItem value="unitedStates">United States</SelectItem>
                   <SelectItem value="mongolia">Mongolia</SelectItem>
@@ -201,8 +264,9 @@ export default function Page() {
             <label htmlFor="firstname" className="flex flex-col gap-2">
               <h3 className="text-sm font-medium">First name</h3>
               <input
+                name="firstName"
                 value={bankCard?.firstName}
-                onChange={onChange}
+                onChange={onChangeBankcard}
                 type="text"
                 id="firstname"
                 placeholder="First name"
@@ -212,8 +276,9 @@ export default function Page() {
             <label htmlFor="lastname" className="flex flex-col gap-2">
               <h3 className="text-sm font-medium">Last name</h3>
               <input
+                name="lastName"
                 value={bankCard?.lastName}
-                onChange={onChange}
+                onChange={onChangeBankcard}
                 type="text"
                 id="lastname"
                 placeholder="Last name"
@@ -225,8 +290,9 @@ export default function Page() {
             <h3 className="text-sm font-medium">Enter card number</h3>
             <input
               type="number"
+              name="cardNumber"
               value={bankCard?.cardNumber}
-              onChange={onChange}
+              onChange={onChangeBankcard}
               id="cardNumber"
               placeholder="XXXX-XXXX-XXXX-XXXX"
               className="border border-border  focus:outline-black rounded-lg p-3"
@@ -236,9 +302,12 @@ export default function Page() {
           <div className="flex gap-4 w-full">
             <label className="w-full flex flex-col gap-2 whitespace-nowrap">
               <h3 className="text-sm font-medium">Expires</h3>
-              <Select>
+              <Select name="expiryDate">
                 <SelectTrigger className="">
-                  <SelectValue placeholder={bankCard?.expiryDate} />
+                  <SelectValue
+                    placeholder={bankCard?.expiryDate}
+                    onChange={onChangeBankcard}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -263,7 +332,7 @@ export default function Page() {
               <h3 className="text-sm font-medium">Year</h3>
               <Select>
                 <SelectTrigger className="">
-                  <SelectValue placeholder="Year" />
+                  <SelectValue placeholder="Year" onChange={onChangeBankcard} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -282,8 +351,11 @@ export default function Page() {
             <label htmlFor="cvc" className="flex flex-col gap-2">
               <h3 className="text-sm font-medium">CVC</h3>
               <input
+                name="cvc"
                 type="number"
                 id="cvc"
+                value={bankCard?.cvc}
+                onChange={onChangeBankcard}
                 placeholder="123"
                 className="px-2 py-[7px] text-sm placeholder:text-sm font-normal border border-border focus:outline-black rounded-md "
                 maxLength={3}
@@ -291,7 +363,12 @@ export default function Page() {
             </label>
           </div>
         </form>
-        <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium">
+        <button
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium"
+          onClick={() => {
+            editBankCard();
+          }}
+        >
           Save changes
         </button>
       </div>
@@ -315,7 +392,6 @@ export default function Page() {
           Save changes
         </button>
       </div>
-      <div></div>
     </div>
   );
 }
