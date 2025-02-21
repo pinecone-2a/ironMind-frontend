@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Profile } from "./_components/profileSection";
 import useUserId from "../_Components/hooks/useFetchUserId";
+import CoffeeLoading from "../_Components/loading";
 
 export default function Page() {
   const router = useRouter();
@@ -61,7 +62,11 @@ export default function Page() {
   }, [userId]);
 
   if (!profile) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CoffeeLoading />
+      </div>
+    );
   }
   return (
     <>

@@ -78,7 +78,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-white p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-black text-[20px]">{userId} </h1>
         <Card className="p-6 rounded-lg shadow-lg">
           <div className="mt-4 flex justify-between items-center">
             <Avatar>
