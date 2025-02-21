@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import cookies from "js-cookie";
 
 export default function onGet(path: string) {
   const [data, setData] = useState([]);
@@ -59,10 +60,11 @@ export const onPut = async (postPath: string, body: any) => {
       }
     );
 
-    return await response.json(); // Серверээс ирсэн өгөгдлийг JSON болгож буцаах
+    return await response.json(); 
   } catch (error) {
     console.error("PUT request failed:", error);
-    return { success: false }; // Алдааны бүтэцтэй хариу буцаах
+    return { success: false }; 
   }
 };
+
 

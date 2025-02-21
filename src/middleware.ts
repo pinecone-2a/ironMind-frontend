@@ -24,6 +24,6 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/log-in", request.url))
 }
 export const config = {
-    matcher: ['/create-profile', '/profile-settings', '/view-page/:path*']
+    matcher: ['/profile-settings', '/view-page/:path*', '/create-profile', '/', '/explore']
     
 }

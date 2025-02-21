@@ -1,5 +1,6 @@
-
-'use client'
+"use client";
+import { useContext } from "react";
+import { UserProvider } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -13,12 +14,15 @@ interface Profile {
 
 export default function Home() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile`); 
-        const data: Profile[] = await res.json(); 
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile`
+        );
+        const data: Profile[] = await res.json();
         setProfiles(data);
       } catch (error) {
         console.error("Failed to fetch profiles:", error);
@@ -26,8 +30,12 @@ export default function Home() {
     };
 
     fetchProfiles();
-  }, []); 
-  
+  }, []);
+
+  const filteredProfiles = profiles.filter((profile) =>
+    profile.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       <div className="w-[957px] h-[880px] p-5 ml-auto mr-auto mb-5">
@@ -35,18 +43,23 @@ export default function Home() {
         <input
           className="h-[36px] w-[243px] border rounded-md mb-5 text-[14px] px-4"
           placeholder="Search name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-        
-        {profiles.map((profile) => (
+
+        {filteredProfiles.map((profile) => (
           <div
-            key={profile.id} 
+            key={profile.id}
             className="w-[909px] h-[224px] border rounded-md p-5 mb-5"
           >
             <div className="flex justify-between">
               <div className="flex gap-3 items-center">
                 <div
                   className="w-[40px] h-[40px] border rounded-full"
-                  style={{ backgroundImage: `url(${profile.avatarImage})`, backgroundSize: 'cover' }}
+                  style={{
+                    backgroundImage: `url(${profile.avatarImage})`,
+                    backgroundSize: "cover",
+                  }}
                 ></div>
                 <h1 className="font-semibold text-[20px]">{profile.name}</h1>
               </div>
@@ -66,7 +79,11 @@ export default function Home() {
               <div className="flex flex-col w-[420px] gap-3">
                 <p className="font-semibold">Social media URL</p>
                 <p className="text-[14px]">
-                  <a href={profile.socialMediaURL} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={profile.socialMediaURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {profile.socialMediaURL}
                   </a>
                 </p>
@@ -78,5 +95,3 @@ export default function Home() {
     </>
   );
 }
-
-

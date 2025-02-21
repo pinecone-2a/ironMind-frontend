@@ -51,7 +51,7 @@ const [user, setUser] = useState<any>();
           Explore
         </button>
       </Link>
-      <Link href={`/view-page/${user}`}>
+      <Link href={`/view-page/`}>
         <button
           className={`rounded-md w-full py-2 px-4 flex items-center gap-2 ${isSeledtedViewPage}`}
         >

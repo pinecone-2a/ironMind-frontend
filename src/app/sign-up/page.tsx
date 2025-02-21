@@ -117,19 +117,21 @@ function EmailPasswordSignup({ username }: { username: string }) {
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-
     try {
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/auth/sign-up`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/auth/sign-up`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
       const result = await response.json();
       console.log("User Created:", result);
 
-      router.push(`/create-profile?username=${encodeURIComponent(result.user.id)}`);
-
+      router.push(
+        `/create-profile?username=${encodeURIComponent(result.user.userId)}`
+      );
     } catch (error) {
       console.error("Error creating user:", error);
     }
