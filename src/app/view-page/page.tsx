@@ -10,14 +10,14 @@ import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Profile } from "./_components/profileSection";
+import useUserId from "../_Components/hooks/useFetchUserId";
+import CoffeeLoading from "../_Components/loading";
 
 export default function Page() {
   const router = useRouter();
-  const { id } = useParams();
+  const { userId } = useUserId();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [image, setImage] = useState<string | null>(null);
-
-  // Upload the image to Cloudinary
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (event.target.files && event.target.files.length > 0) {
@@ -44,10 +44,10 @@ export default function Page() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (id) {
+      if (userId) {
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${id}`
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${userId}`
           );
           const data = await res.json();
           console.log(data);
@@ -59,16 +59,20 @@ export default function Page() {
     };
 
     fetchProfile();
-  }, [id]);
+  }, [userId]);
 
   if (!profile) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CoffeeLoading />
+      </div>
+    );
   }
   return (
     <>
       <Navigation />
       <div className="w-screen h-[319px] bg-[#F4F4F5] flex justify-center items-center relative">
-        {profile.userId === id && !profile.backgroundImage ? (
+        {profile.userId === userId && !profile.backgroundImage ? (
           <>
             <input
               accept="image/*"
