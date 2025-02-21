@@ -1,57 +1,83 @@
-
-'use client'
+"use client";
 import * as React from "react";
-import { Navigation } from "../../(web)/_Components/Navigation";
+import { Navigation } from "@/app/(web)/_Components/Navigation";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import ProfilePage from "./profile";
 import DonationScreen from "./donation";
 import cookies from "js-cookie";
 
-
-
 export default function Page() {
-  const [donorId, setDonorId] = useState<any>()
+  interface Profile {
+    id: string;
+    name: string;
+    about: string;
+    avatarImage: string;
+    socialMediaURL: string;
+    backgroundImage?: string | null;
+    userId?: string;
+  }
+  const [donorId, setDonorId] = useState<any>();
+  const router = useParams();
+  const { id } = router;
 
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        console.log(document.cookie, cookies.get());
 
-    useEffect(() => {
-      async function fetchUser() {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: { Cookie: cookies.get().toString() },
+          }
+        );
+
+        const data = await res.json();
+
+        console.log(data);
+        setDonorId(data.user.userId.id);
+      } catch (error) {}
+    }
+    fetchUser();
+  }, []);
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (id) {
         try {
-          console.log(document.cookie, cookies.get());
-  
-  
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
-            {
-              method: "POST",
-              credentials: "include",
-              headers: { Cookie: cookies.get().toString() },
-            }
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${id}`
           );
-  
-  
-      
-  
           const data = await res.json();
-  
           console.log(data);
-          setDonorId(data.user.userId.id);
-  
-  
+          setProfile(data);
         } catch (error) {
-   
+          console.error("Failed to fetch profile:", error);
         }
       }
-      fetchUser();
-    }, []);
-
+    };
+    fetchProfile();
+  }, [id]);
+  console.log(profile);
 
   return (
     <>
+      <div className="w-screen h-[319px] bg-[#F4F4F5] flex justify-center items-center relative">
+        <img
+          src={profile?.backgroundImage || "https://via.placeholder.com/150"}
+          className="bg-cover object-cover rounded-md w-full h-full"
+        />
+      </div>
 
-      <div className="w-full flex gap-8 absolute ">
-       <ProfilePage/>
-       <DonationScreen/>
+      <div className="flex justify-center">
+        <div className="absolute mt-[-3%] flex justify-center gap-8">
+          <ProfilePage />
+          <DonationScreen />
+        </div>
       </div>
     </>
   );

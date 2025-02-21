@@ -6,7 +6,6 @@ import cookies from "js-cookie";
 import { useEffect } from "react";
 import { useState } from "react";
 
-
 export const SideBar = () => {
   const pathname = usePathname();
   const splitedPathname = pathname.split("/");
@@ -16,24 +15,24 @@ export const SideBar = () => {
     splitedPathname[1] === "view-page" ? "bg-accent" : "";
   const isSeledtedAccSettings =
     splitedPathname[1] === "profile-settings" ? "bg-accent" : "";
-const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<any>();
 
-    useEffect(() => {
-      async function fetchUser() {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
-            {
-              method: "POST",
-              credentials: "include",
-              headers: { Cookie: cookies.get().toString() },
-            }
-          );
-          const data = await res.json()
-          setUser(data.user.userId.id);
-      }
-  
-      fetchUser();
-    }, []);
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { Cookie: cookies.get().toString() },
+        }
+      );
+      const data = await res.json();
+      setUser(data.user.userId.id);
+    }
+
+    fetchUser();
+  }, []);
 
   return (
     <div className="flex flex-col h-full gap-1 text-sm w-[251px] font-medium">
@@ -51,7 +50,7 @@ const [user, setUser] = useState<any>();
           Explore
         </button>
       </Link>
-      <Link href={`/view-page/`}>
+      <Link href={`/view-page`}>
         <button
           className={`rounded-md w-full py-2 px-4 flex items-center gap-2 ${isSeledtedViewPage}`}
         >
