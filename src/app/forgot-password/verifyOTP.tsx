@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function OtpModal({ onClose }: { onClose: () => void }) {
 
-
+  
   
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
