@@ -1,12 +1,9 @@
 "use client";
-import { useContext } from "react";
-import { UserProvider } from "@/context/AuthContext";
-import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Navigation } from "../(web)/_Components/Navigation";
 import ProfileScreen from "./_components/profileSection";
 import DonationScreen from "./_components/donationSection";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Profile } from "./_components/profileSection";
@@ -17,7 +14,6 @@ export default function Page() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [image, setImage] = useState<string | null>(null);
 
-  // Upload the image to Cloudinary
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (event.target.files && event.target.files.length > 0) {
