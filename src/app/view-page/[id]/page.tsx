@@ -10,76 +10,138 @@ import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Profile } from "./_components/profileSection";
+import CoffeeLoading from "@/app/_Components/loading";
 
 
 export default function Page() {
-  const router = useRouter()
-  const {id} =  useParams();
+  const router = useRouter();
+  const { id } = useParams();
   const [profile, setProfile] = useState<Profile | null>(null);
-  console.log(id)
-  const [image, setImage] = useState<string|null>(null);
-   
-  const handleImageChange= (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const [image, setImage] = useState<string | null>(null);
+  
+  // Upload the image to Cloudinary
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "Food_delivery");
 
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setImage(imageURL); 
-    } else {
-      setImage(null); 
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/df88yvhqr/upload`,
+          { method: "POST", body: data }
+        );
+
+        if (!response.ok) throw new Error("Image upload failed");
+
+        const dataJson = await response.json();
+        setImage(dataJson.secure_url);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
     }
   };
 
-    useEffect(() => {
-      const fetchProfile = async () => {
-        if (id) {
-          try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${id}`);
-            const data = await res.json();
-            console.log(data)
-            setProfile(data.profile);
-          } catch (error) {
-            console.error('Failed to fetch profile:', error);
-          } 
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (id) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${id}`);
+          const data = await res.json();
+          setProfile(data.profile);
+        } catch (error) {
+          console.error('Failed to fetch profile:', error);
         }
       }
+    };
+
+    fetchProfile();
+  }, [id]);
+
   
-      fetchProfile();
-    }, [id]);
+  useEffect(() => {
+    const uploadBackgroundImage = async () => {
+      if (profile && image) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/addBackground/${profile.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ backgroundImage: image }),
+          });
     
-    if (!profile) {
-      return <div>Loading...</div>;
-    }
+          if (!res.ok) {
+            const errorMessage = await res.text();
+            throw new Error(errorMessage || 'Failed to upload image');
+          }
+    
+          const data = await res.json();
+          console.log('Success:', data);
+    
+        
+          setProfile((prevProfile) => {
+            if (!prevProfile) return prevProfile; 
+            return {
+              ...prevProfile,
+              backgroundImage: image, 
+            };
+          });
+    
+        } catch (error) {
+          console.error('Upload failed:', error);
+        }
+      }
+    };
+    
+
+    uploadBackgroundImage();
+  }, [image, profile]); 
+
+ 
+  if (!profile) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CoffeeLoading />
+      </div>
+    );
+  }
+
   return (
     <>
       <Navigation />
       <div className="w-screen h-[319px] bg-[#F4F4F5] flex justify-center items-center relative">
-        {profile.id === id && !image ? (
+        {profile.userId === id && !profile.backgroundImage ? (
           <>
-
             <input
               accept="image/*"
               className="hidden"
-              onChange={handleImageChange}
+              onChange={handleUpload}
               type="file"
+              id="image"
             />
-            <Button>Add a cover image</Button>
+            <label htmlFor="image" className="bg-[#18181B] w-[181px] h-[40px] rounded-md text-white flex justify-center items-center">
+              Add cover image
+            </label>
           </>
         ) : (
           <img
             src={image || profile.backgroundImage || 'https://via.placeholder.com/150'}
             className="bg-cover object-cover rounded-md w-full h-full"
-            alt="Cover Image"
           />
         )}
       </div>
-      <Button className="absolute top-20">Change cover</Button>
+      
       <div className="flex justify-center">
         <div className="absolute mt-[-3%] flex justify-center gap-8">
-         <ProfileScreen />
-         <DonationScreen />
+          <ProfileScreen />
+          <DonationScreen />
         </div>
       </div>
     </>
   );
 }
+

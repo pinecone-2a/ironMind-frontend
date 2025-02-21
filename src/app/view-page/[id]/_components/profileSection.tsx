@@ -13,6 +13,7 @@ export interface Profile {
   avatarImage: string;
   socialMediaURL: string;
   backgroundImage?: string | null;
+  userId?: string
 }
 
 export default function ProfilePage() {
@@ -62,7 +63,7 @@ export default function ProfilePage() {
             <div className="flex justify-between">
               <div className="gap-3 flex items-center">
                 <div className="rounded-full w-[48px] h-[48px] bg-[#F4F4F5]">
-
+                    
                   <img
                     src={profile.avatarImage}
                     alt={profile.name}
