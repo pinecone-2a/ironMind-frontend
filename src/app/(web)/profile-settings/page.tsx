@@ -126,7 +126,7 @@ export default function Page() {
       );
 
       const dataJson = await response.json();
-      setProfile((prev: any) => ({ ...prev, image: dataJson.secure_url }));
+      setProfile((prev: any) => ({ ...prev, avatarImage: dataJson.secure_url }));
     }
   };
 

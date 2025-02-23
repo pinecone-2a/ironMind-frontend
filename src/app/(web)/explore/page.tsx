@@ -64,7 +64,7 @@ export default function Home() {
                 <h1 className="font-semibold text-[20px]">{profile.name}</h1>
               </div>
               <Link href={`/userProfile/${profile.id}`}>
-                <button className="bg-[#F4F4F5] w-[136px] h-[40px] rounded-md">
+                <button className="bg-[#F4F4F5] w-[136px] h-[40px] rounded-md hover:bg-gray-400">
                   View profile
                 </button>
               </Link>

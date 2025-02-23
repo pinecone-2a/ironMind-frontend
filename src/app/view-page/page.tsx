@@ -71,7 +71,7 @@ export default function Page() {
   return (
     <>
       <Navigation />
-      <div className="w-screen h-[319px] bg-[#F4F4F5] flex justify-center items-center relative">
+      <div className="w-screen h-[389px] bg-[#F4F4F5] flex justify-center items-center relative">
         {profile.userId === userId && !profile.backgroundImage ? (
           <>
             <input
